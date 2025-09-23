@@ -23,11 +23,19 @@ new #[Layout('layouts.guest')] class extends Component
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'national_id' => ['required', 'string', 'max:14', 'unique:' . User::class],
+            'phone_number' => [
+                'required',
+                'string',
+                'regex:/^(010|011|012|015)[0-9]{8}$/',
+                'unique:' . User::class,
+            ],
+            'role' => ['required', 'in:lawyer,litigant'],
+            
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        if ()
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered($user = User::create($validated)));
