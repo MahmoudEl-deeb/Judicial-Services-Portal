@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('hearings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('case_id')->constrained('court_cases')->onDelete('cascade');
+            $table->foreignId('case_id')->constrained('cases')->onDelete('cascade');
             $table->foreignId('judge_id')->constrained('judges')->onDelete('cascade');
             $table->date('hearing_date');
             $table->time('hearing_time');

@@ -1,44 +1,45 @@
 <?php
 
+// database/factories/UserFactory.php
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
-
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $arabicFirstNames = [
+            'أحمد', 'محمد', 'علي', 'حسن', 'حسام', 'خالد', 'عمر', 'يوسف', 'إبراهيم', 'عبدالله',
+            'فاطمة', 'عائشة', 'خديجة', 'مريم', 'زينب', 'سارة', 'نور', 'هند', 'ليلى', 'آمال'
+        ];
+        
+        $arabicLastNames = [
+            'المصري', 'أحمد', 'محمد', 'علي', 'حسن', 'عبدالرحمن', 'الشريف', 'العربي', 'السيد', 
+            'إبراهيم', 'عثمان', 'الطاهر', 'المحمدي', 'الأحمدي', 'العلي', 'الحسني', 'القاضي'
+        ];
+
         return [
-            'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password' => Hash::make('password'),
+            'first_name' => fake()->randomElement($arabicFirstNames),
+            'last_name' => fake()->randomElement($arabicLastNames),
+            'national_id' => fake()->unique()->numerify('##############'),
+            'phone' => '+2' . fake()->randomElement(['01', '02', '03']) . fake()->numerify('#########'),
+            'status' => fake()->randomElement(['active', 'inactive', 'suspended']),
+            'email_verified_at' => fake()->optional()->dateTimeBetween('-1 year', 'now'),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function active()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(['status' => 'active']);
+    }
+
+    public function verified()
+    {
+        return $this->state(['email_verified_at' => now()]);
     }
 }

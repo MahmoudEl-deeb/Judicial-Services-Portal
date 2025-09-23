@@ -11,7 +11,7 @@ return new class extends Migration
      */
 public function up()
 {
-    Schema::create('court_cases', function (Blueprint $table) {
+    Schema::create('cases', function (Blueprint $table) {
         $table->id();
         $table->string('case_number')->unique();
         $table->string('cassation_appeal_number')->unique();

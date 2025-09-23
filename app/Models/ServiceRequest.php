@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ServiceRequest extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'request_number','requester_id','service_type_key','department_id',
         'assigned_secretary_id','approved_by_secretary_id','request_title',

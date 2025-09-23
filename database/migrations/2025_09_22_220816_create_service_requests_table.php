@@ -17,11 +17,11 @@ public function up()
         $table->foreignId('requester_id')->constrained('users');
         $table->foreignId('service_type_id')->constrained('service_types')->onDelete('cascade');
         $table->foreignId('department_id')->constrained('cassation_departments');
-        $table->foreignId('assigned_secretary_id')->nullable()->constrained('judge_secretaries');
-        $table->foreignId('approved_by_secretary_id')->nullable()->constrained('judge_secretaries');
+        $table->foreignId('assigned_secretary_id')->nullable()->constrained('judge_sercretories');
+        $table->foreignId('approved_by_secretary_id')->nullable()->constrained('judge_sercretories');
         $table->string('request_title');
         $table->text('request_description')->nullable();
-        $table->foreignId('related_case_id')->nullable()->constrained('court_cases');
+        $table->foreignId('related_case_id')->nullable()->constrained('cases');
         $table->enum('status', [
             'pending','under_department_review','assigned_to_secretary','in_progress',
             'pending_approval','approved','rejected','completed','cancelled','awaiting_payment'

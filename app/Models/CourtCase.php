@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CourtCase extends Model
 {
+    use HasFactory;
     protected $table = 'cases';
     protected $fillable = [
         'case_number','cassation_appeal_number','case_title','case_description',

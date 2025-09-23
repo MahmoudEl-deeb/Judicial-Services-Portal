@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('national_id')->unique();
             $table->string('phone')->nullable();
-            $table->enum('user_type', ['admin', 'judge', 'judge_secretary', 'lawyer', 'litigant']);
             $table->enum('status', ['active', 'inactive', 'suspended'])->default('active');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

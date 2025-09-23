@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ServiceType extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'service_type_key','service_name_ar','service_name_en',
         'description_ar','description_en','responsible_department_id',

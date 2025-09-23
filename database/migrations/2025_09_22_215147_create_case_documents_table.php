@@ -13,7 +13,7 @@ public function up()
 {
     Schema::create('case_documents', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('case_id')->constrained('court_cases')->onDelete('cascade');
+        $table->foreignId('case_id')->constrained('cases')->onDelete('cascade');
         $table->string('document_name');
         $table->string('file_path');
         $table->foreignId('uploaded_by')->constrained('users');

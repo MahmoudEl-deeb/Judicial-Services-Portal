@@ -13,7 +13,7 @@ return new class extends Migration
     {
 Schema::create('appellants', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('case_id')->constrained('court_cases')->onDelete('cascade');
+    $table->foreignId('case_id')->constrained('cases')->onDelete('cascade');
     $table->string('full_name');
     $table->string('national_id')->unique();
     $table->string('phone')->nullable();
