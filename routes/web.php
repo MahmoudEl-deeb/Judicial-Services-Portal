@@ -1,20 +1,15 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function(){
-    return "hello";
-});
+Route::view('/', 'welcome');
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-Route::post('/login', [AuthController::class, 'login'])->name('loginProcess');
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('/register', [AuthController::class, 'showRegisterationForm'])->name('register');
-
-Route::post('/register', [AuthController::class, 'register'])->name('registerProcess');
-
-
+require __DIR__.'/auth.php';
