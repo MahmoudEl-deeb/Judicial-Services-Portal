@@ -12,8 +12,6 @@ return new class extends Migration {
             $table->string('bar_registration_number')->unique();
             $table->string('bar_registration_image');
             $table->string('specialization');
-            $table->date('registration_date')->nullable();
-            $table->enum('license_status', ['active', 'suspended', 'expired'])->default('active');
             $table->timestamps();
         });
     }
