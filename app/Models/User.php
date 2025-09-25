@@ -77,4 +77,14 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+        public function getDashboardRoute()
+    {
+        if ($this->hasRole('lawyer')) {
+            return route('lawyer.dashboard');
+        } elseif ($this->hasRole('litigant')) {
+            return route('litigant.dashboard');
+        } elseif ($this->hasRole('admin')) {
+            return route('admin.dashboard');
+        }
+    }
 }

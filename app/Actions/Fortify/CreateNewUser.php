@@ -52,3 +52,4 @@ class CreateNewUser implements CreatesNewUsers
         return redirect()->back()->withErrors(['error' => 'An error occurred while creating the user. Please try again.']);
     }
 }
+}
