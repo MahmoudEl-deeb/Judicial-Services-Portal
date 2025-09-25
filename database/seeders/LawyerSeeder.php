@@ -23,15 +23,13 @@ class LawyerSeeder extends Seeder
                     'القانون المدني', 'القانون الجنائي', 'القانون التجاري', 'القانون الإداري',
                     'القانون الدستوري', 'قانون العمل', 'قانون الأحوال الشخصية', 'القانون الضريبي'
                 ]),
-                'registration_date' => fake()->dateTimeBetween('-15 years', '-1 year'),
-                'license_status' => 'active',
             ]);
         }
 
         // Create additional lawyers if needed
         $neededLawyers = 40 - $lawyerUsers->count();
         if ($neededLawyers > 0) {
-            Lawyer::factory()->active()->count($neededLawyers)->create();
+            Lawyer::factory()->count($neededLawyers)->create();
         }
     }
 }

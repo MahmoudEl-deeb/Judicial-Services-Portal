@@ -25,28 +25,28 @@ class UserSeeder extends Seeder
         $admin->assignRole('admin');
 
         // Create test users for each role
-        $judgeUser = User::factory()->active()->verified()->create([
+        $judgeUser = User::factory()->active()->create([
             'email' => 'judge@court.gov.eg',
             'first_name' => 'أحمد',
             'last_name' => 'حسن'
         ]);
         $judgeUser->assignRole('judge');
 
-        $secretaryUser = User::factory()->active()->verified()->create([
+        $secretaryUser = User::factory()->active()->create([
             'email' => 'secretary@court.gov.eg',
             'first_name' => 'فاطمة',
             'last_name' => 'علي'
         ]);
         $secretaryUser->assignRole('judge_secretary');
 
-        $lawyerUser = User::factory()->active()->verified()->create([
+        $lawyerUser = User::factory()->active()->create([
             'email' => 'lawyer@court.gov.eg',
             'first_name' => 'محمد',
             'last_name' => 'عمر'
         ]);
         $lawyerUser->assignRole('lawyer');
 
-        $litigantUser = User::factory()->active()->verified()->create([
+        $litigantUser = User::factory()->active()->create([
             'email' => 'litigant@court.gov.eg',
             'first_name' => 'سارة',
             'last_name' => 'إبراهيم'
