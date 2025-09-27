@@ -1,8 +1,9 @@
 <?php
+
 namespace Database\Seeders;
 
-use App\Models\CassationDepartment;
 use Illuminate\Database\Seeder;
+use App\Models\CassationDepartment;
 
 class CassationDepartmentSeeder extends Seeder
 {
@@ -10,42 +11,48 @@ class CassationDepartmentSeeder extends Seeder
     {
         $departments = [
             [
-                'department_code' => 'CIV001',
-                'department_name_ar' => 'الدائرة المدنية الأولى',
-                'department_name_en' => 'First Civil Department',
-                'department_type' => 'civil'
+                'department_code' => 'CIV100',
+                'department_name_ar' => 'الشؤون المدنية',
+                'department_name_en' => 'Civil Affairs',
+                'department_type' => 'civil',
             ],
             [
-                'department_code' => 'COM001',
-                'department_name_ar' => 'الدائرة التجارية الأولى',
-                'department_name_en' => 'First Commercial Department',
-                'department_type' => 'commercial'
+                'department_code' => 'COM200',
+                'department_name_ar' => 'الشؤون التجارية',
+                'department_name_en' => 'Commercial Affairs',
+                'department_type' => 'commercial',
             ],
             [
-                'department_code' => 'CRM001',
-                'department_name_ar' => 'الدائرة الجنائية الأولى',
-                'department_name_en' => 'First Criminal Department',
-                'department_type' => 'criminal'
+                'department_code' => 'CRM300',
+                'department_name_ar' => 'الشؤون الجنائية',
+                'department_name_en' => 'Criminal Affairs',
+                'department_type' => 'criminal',
             ],
             [
-                'department_code' => 'ADM001',
-                'department_name_ar' => 'الدائرة الإدارية الأولى',
-                'department_name_en' => 'First Administrative Department',
-                'department_type' => 'administrative'
+                'department_code' => 'ADM400',
+                'department_name_ar' => 'الشؤون الإدارية',
+                'department_name_en' => 'Administrative Affairs',
+                'department_type' => 'administrative',
             ],
             [
-                'department_code' => 'CON001',
-                'department_name_ar' => 'الدائرة الدستورية',
-                'department_name_en' => 'Constitutional Department',
-                'department_type' => 'constitutional'
+                'department_code' => 'CON500',
+                'department_name_ar' => 'الشؤون الدستورية',
+                'department_name_en' => 'Constitutional Affairs',
+                'department_type' => 'constitutional',
+            ],
+            [
+                'department_code' => 'DIS600',
+                'department_name_ar' => 'الشؤون التأديبية',
+                'department_name_en' => 'Disciplinary Affairs',
+                'department_type' => 'disciplinary',
             ],
         ];
 
         foreach ($departments as $dept) {
-            CassationDepartment::create($dept);
+            CassationDepartment::updateOrCreate(
+                ['department_type' => $dept['department_type']],
+                $dept
+            );
         }
-
-        // Create additional random departments
-        CassationDepartment::factory()->count(5)->create();
     }
 }

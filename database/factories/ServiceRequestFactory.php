@@ -41,9 +41,9 @@ class ServiceRequestFactory extends Factory
 
         return [
             'request_number' => 'طلب/' . fake()->year() . '/' . fake()->unique()->numberBetween(10000, 99999),
-            'requester_id' => User::factory(),
-            'service_type_id' => ServiceType::factory(),
-            'department_id' => CassationDepartment::factory(),
+            'requester_id' => fn() => User::inRandomOrder()->first()->id,
+            'service_type_id' => fn() => ServiceType::inRandomOrder()->first()->id,
+            'department_id' => fn() => CassationDepartment::inRandomOrder()->first()->id,
             'assigned_secretary_id' => null,
             'approved_by_secretary_id' => null,
             'request_title' => fake()->randomElement($arabicRequestTitles),

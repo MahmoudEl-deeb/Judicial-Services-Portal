@@ -1,13 +1,15 @@
 <?php
 
+use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Auth\Login;
 use App\Livewire\Pages\AllServices;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\Register;
 use App\Livewire\Lawyer\Dashboard as LawyerDashboard;
 use App\Livewire\Litigant\Dashboard as LitigantDashboard;
+use App\Livewire\Pages\LandingPage;
 
-Route::view('/', 'welcome');
+Route::get('/', LandingPage::class)->name('home');
 
 
 
@@ -27,24 +29,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['role:litigant'])
         ->name('litigant.dashboard');
     
-    // // Admin dashboard
-    // Route::get('/admin/dashboard', AdminDashboard::class)
-    //     ->middleware(['role:admin'])
-    //     ->name('admin.dashboard');
-});
+    // Admin dashboard
+    Route::get('/admin/dashboard', AdminDashboard::class)
+        ->middleware(['role:admin'])
+        ->name('admin.dashboard');
 
-// routes/web.php
-Route::get('/test-email', function () {
-    try {
-        \Illuminate\Support\Facades\Mail::raw('Test email content', function ($message) {
-            $message->to('mahmoud.eldeeb.9898@gmail.com')
-                ->subject('Test Email from Laravel');
-        });
-
-        return 'Email sent successfully (or so it seems)';
-    } catch (\Exception $e) {
-        return 'Error: ' . $e->getMessage();
-    }
+    Route::get('/services', action: AllServices::class)->name('services');
 });
 
 Route::get('/register', Register::class)

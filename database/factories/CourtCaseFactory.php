@@ -79,8 +79,8 @@ class CourtCaseFactory extends Factory
             'case_description' => fake()->optional()->randomElement($arabicDescriptions),
             'cassation_case_type' => fake()->randomElement($caseTypes),
             'status' => fake()->randomElement($statuses),
-            'lawyer_id' => Lawyer::factory(),
-            'department_id' => CassationDepartment::factory(),
+            'lawyer_id' => fn() => Lawyer::inRandomOrder()->first()->id,
+            'department_id' => fn() => CassationDepartment::inRandomOrder()->first()->id,
             'assigned_judge_id' => null, // Will be set in seeder
             'lower_court_name' => fake()->randomElement($lowerCourts),
             'lower_court_judgment_number' => fake()->numerify('####/####'),
