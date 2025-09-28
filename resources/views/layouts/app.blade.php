@@ -36,7 +36,7 @@
             @endif --}}
 
 
-        </div>
+        {{-- </div>
 
         @stack('modals')
 
@@ -53,6 +53,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @livewireStyles
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         
@@ -127,7 +128,7 @@
                        :class="activeSection === 'home' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الرئيسية
                     </a>
-                    <a href="#services" class="transition-colors"
+                    <a href="/services" class="transition-colors"
                        :class="activeSection === 'services' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الخدمات
                     </a>
@@ -141,6 +142,7 @@
                     </a>
                 </nav>
                 
+                @guest
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-4 space-x-reverse">
                     <a href="/login" class="px-6 py-2 text-blue-800 border border-blue-800 rounded-lg hover:bg-blue-50 transition-colors hidden md:block">تسجيل الدخول</a>
@@ -151,6 +153,34 @@
                         <i class="fas fa-bars"></i>
                     </button>
                 </div>
+                @endguest
+                @auth
+                    <!-- User Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                            <span class="text-gray-700">{{ Auth::user()->first_name }}</span>
+                            <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                        </button>
+                        <div x-show="open" @click.away="open = false"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 transform scale-100"
+                             x-transition:leave-end="opacity-0 transform scale-95"
+                             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                            <a href="{{ auth()->user()->getDashboardRoute() }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
+                            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
+                            <div class="border-t border-gray-100"></div>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full text-right block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    تسجيل الخروج
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endauth
             </div>
 
             <!-- Mobile Menu -->
@@ -260,5 +290,6 @@
             }))
         });
     </script>
+    @livewireScripts
 </body>
 </html>

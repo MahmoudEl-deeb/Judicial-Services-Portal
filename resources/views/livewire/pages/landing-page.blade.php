@@ -1,4 +1,3 @@
-
 <div class="bg-gray-50" x-data="{ 
     mobileMenuOpen: false,
     activeSection: 'home',
@@ -290,8 +289,4 @@ x-init="setInterval(() => {
             </div>
         </div>
     </section>
-
- 
-{{-- </body>
-</html> --}}
 </div>

@@ -5,11 +5,26 @@ namespace App\Livewire\Admin;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.app')]
+// #[Layout('layouts.app')]
 class Dashboard extends Component
 {
     public function render()
     {
-        return view('livewire.admin.dashboard');
-    }
+return view('livewire.lawyer.dashboard')
+            ->layout('layouts.dash', [
+                'links' => [
+                    [
+                        'url' => route('lawyer.dashboard'),
+                        'label' => 'الرئيسية',
+                        'icon' => 'fas fa-home',
+                        'active' => 'lawyer/dashboard',
+                    ],
+                    [
+                        'url' => route('lawyer.dashboard'),
+                        'label' => 'القضايا',
+                        'icon' => 'fas fa-gavel',
+                        'active' => 'lawyer/cases*',
+                    ],
+                ],
+            ]);    }
 }

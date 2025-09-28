@@ -83,5 +83,6 @@ class User extends Authenticatable implements MustVerifyEmail
         } elseif ($this->hasRole('admin')) {
             return route('admin.dashboard');
         }
+        return route('dashboard');
     }
 }

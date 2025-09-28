@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Layout;
 
+#[Layout('layouts.guest')]
 class Register extends Component
 {
     // الحقول
@@ -42,11 +45,17 @@ class Register extends Component
         return $rules;
     }
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     /**
      * تنفيذ التسجيل
      */
     public function register()
     {
+        Log::info('Register method called.');
         $this->validate();
         $user = new User();
         try {
@@ -83,13 +92,13 @@ class Register extends Component
 
             return redirect()->route('dashboard');
         } catch (\Exception $e) {
-            \Log::error('Registration error: ' . $e->getMessage());
+            Log::error('Registration error: ' . $e->getMessage());
             $this->addError('error', 'حدث خطأ أثناء إنشاء المستخدم: ' . $e->getMessage());
         }
     }
 
     public function render()
     {
-        return view('livewire.auth.register')->layout('layouts.guest');
+        return view('livewire.auth.register');
     }
 }

@@ -7,7 +7,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Layout('layouts.guest')]
+#[Layout('layouts.app')]
 class AllServices extends Component
 {
     use WithPagination;

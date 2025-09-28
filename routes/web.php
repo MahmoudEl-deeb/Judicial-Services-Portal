@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\Register;
 use App\Livewire\Lawyer\Dashboard as LawyerDashboard;
 use App\Livewire\Litigant\Dashboard as LitigantDashboard;
+use App\Livewire\Pages\CreateService;
 use App\Livewire\Pages\LandingPage;
 
 Route::get('/', LandingPage::class)->name('home');
@@ -16,7 +17,12 @@ Route::get('/', LandingPage::class)->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     // Generic dashboard (will redirect based on role)
     Route::get('/dashboard', function () {
-        return redirect(auth()->user()->getDashboardRoute());
+        /** @var \App\Models\User $user */
+        $user = Illuminate\Support\Facades\Auth::user();
+        if ($user) {
+            return redirect($user->getDashboardRoute());
+        }
+        return redirect()->route('login');
     })->name('dashboard');
     
     // Lawyer dashboard
@@ -34,7 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['role:admin'])
         ->name('admin.dashboard');
 
-    Route::get('/services', action: AllServices::class)->name('services');
+    Route::get('/services',  AllServices::class)->name('services');
+Route::get('/create-service/{id}', CreateService::class)->name('services.create');
 });
 
 Route::get('/register', Register::class)
