@@ -1,59 +1,12 @@
-{{-- <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-        <!-- Styles -->
-        @livewireStyles
-    </head>
-    <body class="font-sans antialiased">
-        <x-banner />
-
-        <div class="min-h-screen bg-gray-100">
-            @livewire(name: 'navigation-menu')
-
-            {{-- <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-            <!-- Page Content -->
-            {{-- <main>
-                {{ $slot }}
-            </main>                    </div>
-                </header>
-            @endif --}}
-
-
-        {{-- </div>
-
-        @stack('modals')
-
-        @livewireScripts
-    </body>
-</html>  --}}
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" x-data="app()">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محكمة النقض المصرية - نظام الخدمات القضائية الإلكترونية</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @livewireStyles
+    @vite( ['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         
@@ -124,19 +77,19 @@
                 
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-8 space-x-reverse">
-                    <a href="#home" class="transition-colors" 
+                    <a href="/" class="transition-colors" wire:navigate
                        :class="activeSection === 'home' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الرئيسية
                     </a>
-                    <a href="/services" class="transition-colors"
+                    <a href="/services" class="transition-colors" wire:navigate
                        :class="activeSection === 'services' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الخدمات
                     </a>
-                    <a href="#about" class="transition-colors"
+                    <a href="#about" class="transition-colors" wire:navigate
                        :class="activeSection === 'about' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        عن المحكمة
                     </a>
-                    <a href="#contact" class="transition-colors"
+                    <a href="#contact" class="transition-colors" wire:navigate
                        :class="activeSection === 'contact' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        اتصل بنا
                     </a>
@@ -145,8 +98,8 @@
                 @guest
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-4 space-x-reverse">
-                    <a href="/login" class="px-6 py-2 text-blue-800 border border-blue-800 rounded-lg hover:bg-blue-50 transition-colors hidden md:block">تسجيل الدخول</a>
-                    <a href="/register" class="px-6 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition-colors hidden md:block">إنشاء حساب</a>
+                    <a href="/login" wire:navigate class="px-6 py-2 text-blue-800 border border-blue-800 rounded-lg hover:bg-blue-50 transition-colors hidden md:block">تسجيل الدخول</a>
+                    <a href="/register" wire:navigate class="px-6 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition-colors hidden md:block">إنشاء حساب</a>
                     
                     <!-- Mobile menu button -->
                     <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg bg-blue-50 text-blue-800">
@@ -169,8 +122,8 @@
                              x-transition:leave-start="opacity-100 transform scale-100"
                              x-transition:leave-end="opacity-0 transform scale-95"
                              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                            <a href="{{ auth()->user()->getDashboardRoute() }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
-                            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
+                            <a href="{{ auth()->user()->getDashboardRoute() }}" wire:navigate class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
+                            <a href="{{ route('profile.show') }}" wire:navigate class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
                             <div class="border-t border-gray-100"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -192,24 +145,24 @@
                  x-transition:leave-end="opacity-0 transform -translate-y-4"
                  class="md:hidden mobile-menu bg-white border-t mt-4 py-4">
                 <div class="flex flex-col space-y-4">
-                    <a href="#home" @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
+                    <a href="/" wire:navigate @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
                        :class="activeSection === 'home' ? 'bg-blue-50 text-blue-800 font-bold' : 'text-gray-600'">
                        الرئيسية
                     </a>
-                    <a href="#services" @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
+                    <a href="/services" wire:navigate @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
                        :class="activeSection === 'services' ? 'bg-blue-50 text-blue-800 font-bold' : 'text-gray-600'">
                        الخدمات
                     </a>
-                    <a href="#about" @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
+                    <a href="#about" wire:navigate @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
                        :class="activeSection === 'about' ? 'bg-blue-50 text-blue-800 font-bold' : 'text-gray-600'">
                        عن المحكمة
                     </a>
-                    <a href="#contact" @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
+                    <a href="#contact" wire:navigate @click="mobileMenuOpen = false" class="py-2 px-4 rounded-lg hover:bg-blue-50"
                        :class="activeSection === 'contact' ? 'bg-blue-50 text-blue-800 font-bold' : 'text-gray-600'">
                        اتصل بنا
                     </a>
                     <div class="border-t pt-4 flex flex-col space-y-2">
-                        <a href="/login" @click="mobileMenuOpen = false" class="py-2 px-4 text-blue-800 border border-blue-800 rounded-lg text-center">تسجيل الدخول</a>
+                        <a href="/login" wire:navigate @click="mobileMenuOpen = false" class="py-2 px-4 text-blue-800 border border-blue-800 rounded-lg text-center">تسجيل الدخول</a>
                         <a href="/register" @click="mobileMenuOpen = false" class="py-2 px-4 bg-blue-800 text-white rounded-lg text-center">إنشاء حساب</a>
                     </div>
                 </div>
@@ -283,12 +236,12 @@
             }
         }
 
-        // Smooth scrolling for navigation links
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('app', () => ({
-                // Data is already defined in x-data attribute
-            }))
-        });
+        // // Smooth scrolling for navigation links
+        // document.addEventListener('alpine:init', () => {
+        //     Alpine.data('app', () => ({
+        //         // Data is already defined in x-data attribute
+        //     }))
+        // });
     </script>
     @livewireScripts
 </body>

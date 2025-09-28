@@ -43,40 +43,7 @@
 
     <form wire:submit.prevent="createServiceRequest" @submit.prevent="handleSubmit" class="space-y-6">
 
-        <!-- Service Selection -->
-        <div class="space-y-2">
-            <label for="service" class="block text-sm font-medium text-gray-700">
-                <i class="fas fa-cogs text-blue-500 ml-2"></i>
-                اختيار الخدمة <span class="text-red-500">*</span>
-            </label>
-            <div class="relative">
-                <select id="service" 
-                        wire:model="selectedService" 
-                        wire:change="updatedSelectedService($event.target.value)"
-                        x-model="form.selectedService"
-                        @change="handleServiceChange"
-                        :class="errors.selectedService ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'"
-                        class="block w-full px-3 py-3 pl-10 border rounded-lg shadow-sm focus:outline-none transition-colors duration-200 bg-white">
-                    <option value="">-- اختر الخدمة --</option>
-                    {{-- @foreach($serviceTypeTypes as $serviceType) --}}
-                        <option value="{{ $serviceType->id }}">{{ $serviceType->service_name_ar }}</option>
-                    {{-- @endforeach --}}
-                </select>
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-list text-gray-400"></i>
-                </div>
-            </div>
-            <div x-show="errors.selectedService" x-transition class="text-red-500 text-sm flex items-center">
-                <i class="fas fa-exclamation-circle ml-1"></i>
-                <span x-text="errors.selectedService"></span>
-            </div>
-            @error('selectedService') 
-                <span class="text-red-500 text-sm flex items-center">
-                    <i class="fas fa-exclamation-circle ml-1"></i>
-                    {{ $message }}
-                </span> 
-            @enderror
-        </div>
+
 
         <!-- Lawyer Selection (Conditional) -->
         <div x-show="showLawyerSelection || $wire.requiresLawyerSignature" 
@@ -196,11 +163,14 @@
             @enderror
         </div>
 
+        @foreach ($serviceType->required_documents as $key )
+        
         <!-- File Attachments (Optional) -->
         <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">
                 <i class="fas fa-paperclip text-blue-500 ml-2"></i>
-                المرفقات (اختياري)
+                {{-- المرفقات (اختياري) --}}
+                {{$key}}
             </label>
             <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors duration-300">
                 <div class="space-y-2">
@@ -239,6 +209,7 @@
                 </template>
             </div>
         </div>
+        @endforeach
 
         <!-- Submit Button -->
         <div class="pt-6">

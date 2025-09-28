@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محكمة النقض المصرية - نظام الخدمات القضائية الإلكترونية</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
-    {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -79,11 +77,11 @@
                 
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-8 space-x-reverse">
-                    <a href="#home" class="transition-colors" 
+                    <a href="/" class="transition-colors"  wire:navigate
                        :class="activeSection === 'home' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الرئيسية
                     </a>
-                    <a href="/services" class="transition-colors"
+                    <a href="/services" class="transition-colors" wire:navigate
                        :class="activeSection === 'services' ? 'text-blue-800 font-bold' : 'text-gray-600 hover:text-blue-600'">
                        الخدمات
                     </a>
@@ -100,8 +98,8 @@
                 @guest
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-4 space-x-reverse">
-                    <a href="/login" class="px-6 py-2 text-blue-800 border border-blue-800 rounded-lg hover:bg-blue-50 transition-colors hidden md:block">تسجيل الدخول</a>
-                    <a href="/register" class="px-6 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition-colors hidden md:block">إنشاء حساب</a>
+                    <a href="/login" wire:navigate class="px-6 py-2 text-blue-800 border border-blue-800 rounded-lg hover:bg-blue-50 transition-colors hidden md:block">تسجيل الدخول</a>
+                    <a href="/register" wire:navigate class="px-6 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-700 transition-colors hidden md:block">إنشاء حساب</a>
                     
                     <!-- Mobile menu button -->
                     <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-lg bg-blue-50 text-blue-800">
@@ -124,12 +122,14 @@
                              x-transition:leave-start="opacity-100 transform scale-100"
                              x-transition:leave-end="opacity-0 transform scale-95"
                              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                            <a href="{{ auth()->user()->getDashboardRoute() }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
-                            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
+                            <a href="{{ auth()->user()->getDashboardRoute() }}" wire:navigate class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">لوحة التحكم</a>
+                            <a href="{{ route('profile.show') }}" wire:navigate class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">الملف الشخصي</a>
                             <div class="border-t border-gray-100"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="w-full text-right block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <button type="submit" 
+                                class="w-full text-right block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" 
+                                wire:submit>
                                     تسجيل الخروج
                                 </button>
                             </form>

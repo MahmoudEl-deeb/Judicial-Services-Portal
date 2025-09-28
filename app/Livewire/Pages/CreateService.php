@@ -24,6 +24,8 @@ class CreateService extends Component
     {
         try{
         $this->serviceType = ServiceType::find($id);
+        $this->serviceType->required_documents = json_decode($this->serviceType->{'required_documents'}, true);
+
         $this->lawyers = User::role('lawyer')->get();
         }catch (\Exception $e){
             \Log::error($e->getMessage());
