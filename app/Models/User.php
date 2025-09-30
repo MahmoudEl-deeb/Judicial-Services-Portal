@@ -85,4 +85,8 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return route('dashboard');
     }
+    public function lawyer()
+{
+    return $this->hasOne(\App\Models\Lawyer::class);
+}
 }

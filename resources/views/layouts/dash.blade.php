@@ -57,10 +57,10 @@
         </div>
     </header>
 
-    <div class="flex">
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-            class="fixed md:static inset-y-0 right-0 w-64 bg-blue-900 text-white transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40">
+            class="fixed md:static inset-y-0 right-0 w-64 flex-shrink-0 bg-blue-900 text-white transform md:translate-x-0 transition-transform duration-200 ease-in-out z-40 min-h-screen">
             <div class="p-6">
                 <h2 class="text-xl font-bold mb-6">القائمة</h2>
                 <nav class="space-y-2">

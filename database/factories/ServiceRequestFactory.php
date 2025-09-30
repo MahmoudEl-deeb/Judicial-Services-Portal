@@ -42,13 +42,15 @@ class ServiceRequestFactory extends Factory
         return [
             'request_number' => 'طلب/' . fake()->year() . '/' . fake()->unique()->numberBetween(10000, 99999),
             'requester_id' => fn() => User::inRandomOrder()->first()->id,
+            'client_national_id' => fake()->numerify('##############'),
+            'is_paid' => fake()->boolean(75),
             'service_type_id' => fn() => ServiceType::inRandomOrder()->first()->id,
             'department_id' => fn() => CassationDepartment::inRandomOrder()->first()->id,
             'assigned_secretary_id' => null,
             'approved_by_secretary_id' => null,
             'request_title' => fake()->randomElement($arabicRequestTitles),
             'request_description' => fake()->optional()->randomElement($arabicDescriptions),
-            'related_case_id' => fake()->optional()->randomElement([null, CourtCase::factory()]),
+            'related_case_id' => fake()->optional()->randomElement([null, \App\Models\CourtCase::factory()]),
             'status' => fake()->randomElement($statuses),
             'priority' => fake()->randomElement(['normal', 'urgent']),
             'is_urgent_service' => $isUrgent,
@@ -56,7 +58,6 @@ class ServiceRequestFactory extends Factory
             'base_fees_amount' => $baseFee,
             'urgent_fees_amount' => $urgentFee,
             'total_fees_amount' => $totalFee,
-            'payment_status' => fake()->randomElement(['pending', 'partial_paid', 'paid', 'refunded']),
             'requested_date' => fake()->dateTimeBetween('-3 months', 'now'),
             'assigned_to_secretary_date' => fake()->optional()->dateTimeBetween('-2 months', 'now'),
             'department_review_date' => fake()->optional()->dateTimeBetween('-2 months', 'now'),
@@ -98,7 +99,7 @@ class ServiceRequestFactory extends Factory
         return $this->state([
             'status' => 'completed',
             'completed_date' => fake()->dateTimeBetween('-1 month', 'now'),
-            'payment_status' => 'paid'
+            'is_paid' => true
         ]);
     }
 }

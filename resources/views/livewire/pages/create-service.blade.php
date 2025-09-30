@@ -1,6 +1,6 @@
-{{-- @dd($serviceTypeTypeType) --}}
+<div>
 <div class="max-w-2xl mx-auto p-8 bg-white rounded-lg shadow-lg" 
-     x-data="serviceRequestForm()" 
+     x-data="serviceForm()" 
      x-init="init()">
 
     <!-- Header -->
@@ -8,13 +8,14 @@
         <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <i class="fas fa-clipboard-list text-2xl text-blue-600"></i>
         </div>
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">طلب {{$serviceType->service_name_ar}}</h1>
-        <p class="text-gray-600">اختر الخدمة المطلوبة واملأ البيانات</p>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">طلب خدمة: {{ $serviceType->name }}</h1>
+        <p class="text-gray-600">{{ $serviceType->description }}</p>
     </div>
 
     <!-- Progress Bar -->
     <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
+        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+             :style="`width: ${progress}%`"></div>
     </div>
 
     <!-- Success Message -->
@@ -22,92 +23,35 @@
         <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
             <div class="flex">
                 <i class="fas fa-check-circle text-green-400 ml-2 mt-1"></i>
-                <div class="text-sm text-green-700">
-                    {{ session('message') }}
-                </div>
+                <div class="text-sm text-green-700">{{ session('message') }}</div>
             </div>
         </div>
     @endif
 
     <!-- Loading Overlay -->
-    <div x-show="loading" 
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div wire:loading.flex class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 text-center">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p class="text-gray-600">جاري إرسال الطلب...</p>
         </div>
     </div>
 
-    <form wire:submit.prevent="createServiceRequest" @submit.prevent="handleSubmit" class="space-y-6">
-
-
-
-        <!-- Lawyer Selection (Conditional) -->
-        <div x-show="showLawyerSelection || $wire.requiresLawyerSignature" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 transform -translate-y-4"
-             x-transition:enter-end="opacity-100 transform translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 transform translate-y-0"
-             x-transition:leave-end="opacity-0 transform -translate-y-4"
-             class="space-y-2 p-4 bg-purple-50 border border-purple-200 rounded-lg">
-            
-            <div class="flex items-center mb-2">
-                <i class="fas fa-user-tie text-purple-600 ml-2"></i>
-                <h3 class="text-lg font-medium text-gray-800">اختيار المحامي</h3>
-            </div>
-            
-            @if($requiresLawyerSignature)
-                <div class="space-y-2">
-                    <label for="lawyer" class="block text-sm font-medium text-gray-700">
-                        المحامي المطلوب <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <select id="lawyer" 
-                                wire:model="selectedLawyer"
-                                x-model="form.selectedLawyer"
-                                :class="errors.selectedLawyer ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-purple-500 focus:ring-purple-500'"
-                                class="block w-full px-3 py-3 pl-10 border rounded-lg shadow-sm focus:outline-none transition-colors duration-200 bg-white">
-                            <option value="">-- اختر المحامي --</option>
-                            @foreach($lawyers as $lawyer)
-                                <option value="{{ $lawyer->id }}">{{ $lawyer->first_name }} {{ $lawyer->last_name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-user-tie text-gray-400"></i>
-                        </div>
-                    </div>
-                    <div x-show="errors.selectedLawyer" x-transition class="text-red-500 text-sm flex items-center">
-                        <i class="fas fa-exclamation-circle ml-1"></i>
-                        <span x-text="errors.selectedLawyer"></span>
-                    </div>
-                    @error('selectedLawyer') 
-                        <span class="text-red-500 text-sm flex items-center">
-                            <i class="fas fa-exclamation-circle ml-1"></i>
-                            {{ $message }}
-                        </span> 
-                    @enderror
-                </div>
-            @endif
-        </div>
+    <form wire:submit.prevent="createServiceRequest" @submit.prevent="submitForm" class="space-y-6">
 
         <!-- Request Title -->
         <div class="space-y-2">
-            <label for="title" class="block text-sm font-medium text-gray-700">
+            <label for="request_title" class="block text-sm font-medium text-gray-700">
                 <i class="fas fa-heading text-blue-500 ml-2"></i>
                 عنوان الطلب <span class="text-red-500">*</span>
             </label>
             <div class="relative">
                 <input type="text" 
-                       id="title" 
+                       id="request_title" 
                        wire:model.live="request_title"
-                       x-model="form.request_title"
-                       @blur="validateField('request_title')"
-                       :class="errors.request_title ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'"
-                       class="block w-full px-3 py-3 pl-10 border rounded-lg shadow-sm focus:outline-none transition-colors duration-200"
+                       x-model="form.title"
+                       @input="updateProgress(); validateField('title')"
+                       :class="errors.title ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
+                       class="block w-full px-3 py-3 pl-10 border rounded-lg focus:outline-none focus:ring-2 transition-colors"
                        placeholder="أدخل عنوان واضح للطلب"
                        maxlength="200">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -115,119 +59,147 @@
                 </div>
             </div>
             <div class="flex justify-between items-center">
-                <div x-show="errors.request_title" x-transition class="text-red-500 text-sm flex items-center">
+                <div x-show="errors.title" x-transition class="text-red-500 text-sm">
                     <i class="fas fa-exclamation-circle ml-1"></i>
-                    <span x-text="errors.request_title"></span>
+                    <span x-text="errors.title"></span>
                 </div>
+                @error('request_title')
+                    <div class="text-red-500 text-sm">
+                        <i class="fas fa-exclamation-circle ml-1"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
                 <div class="text-xs text-gray-500">
-                    <span x-text="form.request_title?.length || 0"></span>/200
+                    <span x-text="form.title.length"></span>/200
                 </div>
             </div>
-            @error('request_title') 
-                <span class="text-red-500 text-sm flex items-center">
-                    <i class="fas fa-exclamation-circle ml-1"></i>
-                    {{ $message }}
-                </span> 
-            @enderror
         </div>
 
         <!-- Request Description -->
         <div class="space-y-2">
-            <label for="description" class="block text-sm font-medium text-gray-700">
+            <label for="request_description" class="block text-sm font-medium text-gray-700">
                 <i class="fas fa-align-left text-blue-500 ml-2"></i>
                 تفاصيل الطلب <span class="text-red-500">*</span>
             </label>
-            <textarea id="description" 
+            <textarea id="request_description"
                       wire:model.live="request_description"
-                      x-model="form.request_description"
-                      @blur="validateField('request_description')"
-                      :class="errors.request_description ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'"
-                      class="block w-full px-3 py-3 border rounded-lg shadow-sm focus:outline-none transition-colors duration-200 resize-none"
+                      x-model="form.description"
+                      @input="updateProgress(); validateField('description')"
+                      :class="errors.description ? 'border-red-300 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'"
+                      class="block w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 resize-none transition-colors"
                       rows="6"
                       maxlength="1000"
                       placeholder="اشرح تفاصيل طلبك بوضوح..."></textarea>
             <div class="flex justify-between items-center">
-                <div x-show="errors.request_description" x-transition class="text-red-500 text-sm flex items-center">
+                <div x-show="errors.description" x-transition class="text-red-500 text-sm">
                     <i class="fas fa-exclamation-circle ml-1"></i>
-                    <span x-text="errors.request_description"></span>
+                    <span x-text="errors.description"></span>
                 </div>
+                @error('request_description')
+                    <div class="text-red-500 text-sm">
+                        <i class="fas fa-exclamation-circle ml-1"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
                 <div class="text-xs text-gray-500">
-                    <span x-text="form.request_description?.length || 0"></span>/1000
+                    <span x-text="form.description.length"></span>/1000
                 </div>
             </div>
-            @error('request_description') 
-                <span class="text-red-500 text-sm flex items-center">
-                    <i class="fas fa-exclamation-circle ml-1"></i>
-                    {{ $message }}
-                </span> 
-            @enderror
         </div>
 
-        @foreach ($serviceType->required_documents as $key )
-        
-        <!-- File Attachments (Optional) -->
-        <div class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">
-                <i class="fas fa-paperclip text-blue-500 ml-2"></i>
-                {{-- المرفقات (اختياري) --}}
-                {{$key}}
-            </label>
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors duration-300">
-                <div class="space-y-2">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400"></i>
-                    <div>
-                        <button type="button" 
-                                @click="document.getElementById('file-upload').click()"
-                                class="text-blue-600 hover:text-blue-500 font-medium">
-                            اختر الملفات
-                        </button>
-                        <span class="text-gray-600"> أو اسحب الملفات هنا</span>
-                    </div>
-                    <p class="text-xs text-gray-500">PDF, DOC, DOCX, JPG, PNG حتى 10MB لكل ملف</p>
-                </div>
-                <input type="file" 
-                       id="file-upload" 
-                       multiple 
-                       accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                       class="hidden"
-                       @change="handleFileUpload($event)">
-            </div>
-            <div x-show="uploadedFiles.length > 0" class="mt-3">
-                <h4 class="text-sm font-medium text-gray-700 mb-2">الملفات المرفقة:</h4>
-                <template x-for="(file, index) in uploadedFiles" :key="index">
-                    <div class="flex items-center justify-between bg-gray-50 rounded p-2 mb-1">
-                        <div class="flex items-center">
-                            <i class="fas fa-file text-blue-500 ml-2"></i>
-                            <span class="text-sm text-gray-700" x-text="file.name"></span>
+        <!-- Document Upload Sections -->
+        @if (!empty($serviceType->required_documents))
+            <div class="space-y-4">
+                <h3 class="text-lg font-medium text-gray-800 border-b pb-2">
+                    <i class="fas fa-folder-open text-blue-500 ml-2"></i>
+                    المستندات المطلوبة
+                </h3>
+                
+                @foreach ($serviceType->required_documents as $key => $doc)
+                    <div class="space-y-2">
+                        <label for="document_{{ $key }}" class="block text-sm font-medium text-gray-700">
+                            <i class="fas fa-paperclip text-blue-500 ml-2"></i>
+                            {{ $doc }}
+                            <span class="text-red-500">*</span>
+                        </label>
+
+                        <div class="border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-300 @if (isset($documents[$key])) border-green-400 bg-green-50 @else @error('documents.' . $key) border-red-400 @else border-gray-300 hover:border-blue-400 @enderror @endif">
+                            
+                            <div class="space-y-2">
+                                <i class="fas fa-cloud-upload-alt text-4xl @if (isset($documents[$key])) text-green-500 @else text-gray-400 @endif"></i>
+                                <div>
+                                    <label for="document_{{ $key }}" 
+                                           class="cursor-pointer font-medium transition-colors @if (isset($documents[$key])) text-green-600 hover:text-green-500 @else text-blue-600 hover:text-blue-500 @endif">
+                                        <span>@if (isset($documents[$key])) تغيير الملف @else اختر الملف @endif</span>
+                                        <input type="file" 
+                                               id="document_{{ $key }}" 
+                                               wire:model.live="documents.{{ $key }}" 
+                                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                               @change="updateProgress()"
+                                               class="hidden">
+                                    </label>
+                                    @if (!isset($documents[$key]))
+                                        <span class="text-gray-600"> أو اسحب الملف هنا</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-gray-500">PDF, DOC, DOCX, JPG, PNG حتى 10MB</p>
+                            </div>
                         </div>
-                        <button type="button" 
-                                @click="removeFile(index)"
-                                class="text-red-500 hover:text-red-700">
-                            <i class="fas fa-times"></i>
-                        </button>
+
+                        <!-- Upload Progress -->
+                        <div wire:loading wire:target="documents.{{ $key }}" class="text-sm text-blue-600 flex items-center">
+                            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 ml-2"></div>
+                            جاري رفع الملف...
+                        </div>
+
+                        <!-- Uploaded File Display -->
+                        @if (isset($documents[$key]))
+                            <div class="mt-3 fade-in">
+                                <div class="flex items-center justify-between bg-green-50 border border-green-200 rounded p-3">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-check text-green-600 ml-2"></i>
+                                        <span class="text-sm text-green-800 font-medium">{{ $documents[$key]->getClientOriginalName() }}</span>
+                                        <span class="text-xs text-green-600 mr-2">({{ number_format($documents[$key]->getSize() / 1024, 1) }} KB)</span>
+                                    </div>
+                                    <button type="button" 
+                                            wire:click="$set('documents.{{ $key }}', null)" 
+                                            class="text-red-500 hover:text-red-700 transition-colors">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
+                        @error('documents.' . $key)
+                            <div class="text-red-500 text-sm">
+                                <i class="fas fa-exclamation-circle ml-1"></i>
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
-                </template>
+                @endforeach
             </div>
-        </div>
-        @endforeach
+        @endif
 
         <!-- Submit Button -->
         <div class="pt-6">
-            <button type="submit" 
-                    :disabled="loading || !isFormValid"
-                    :class="loading || !isFormValid ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transform hover:scale-105'"
-                    class="w-full flex justify-center items-center px-6 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
-                <span x-show="!loading" class="flex items-center">
+            <button type="submit"
+                    wire:loading.attr="disabled"
+                    :disabled="!isFormValid"
+                    :class="(!isFormValid || $wire.loading) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 transform hover:scale-105'"
+                    class="w-full flex justify-center items-center px-6 py-4 text-lg font-medium rounded-lg text-white bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+                
+                <span wire:loading.remove wire:target="createServiceRequest" class="flex items-center">
                     <i class="fas fa-paper-plane ml-2"></i>
                     إرسال الطلب
                 </span>
-                <span x-show="loading" class="flex items-center">
+                
+                <span wire:loading wire:target="createServiceRequest" class="flex items-center">
                     <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white ml-2"></div>
                     جاري الإرسال...
                 </span>
             </button>
         </div>
-
     </form>
 
     <!-- Help Section -->
@@ -237,9 +209,8 @@
             تحتاج مساعدة؟
         </h4>
         <div class="space-y-2 text-sm text-gray-600">
-            <p>• اختر الخدمة المناسبة من القائمة</p>
             <p>• املأ العنوان والوصف بوضوح</p>
-            <p>• أرفق المستندات المطلوبة إن وجدت</p>
+            <p>• أرفق المستندات المطلوبة</p>
             <p>• سيتم إشعارك بحالة الطلب عبر البريد الإلكتروني</p>
         </div>
         <div class="mt-3 pt-3 border-t border-gray-200">
@@ -249,183 +220,158 @@
             </p>
         </div>
     </div>
+</div>
 
-    <script>
-        function serviceRequestForm() {
-            return {
-                // Form data
-                form: {
-                    selectedService: @entangle('selectedService'),
-                    selectedLawyer: @entangle('selectedLawyer'),
-                    request_title: @entangle('request_title'),
-                    request_description: @entangle('request_description')
-                },
-                
-                // UI state
-                loading: false,
-                errors: {},
-                progress: 0,
-                showLawyerSelection: false,
-                uploadedFiles: [],
+<script>
+function serviceForm() {
+    return {
+        // Form data (synced with Livewire)
+        form: {
+            title: @entangle('request_title'),
+            description: @entangle('request_description')
+        },
+        
+        // UI state
+        errors: {},
+        progress: 0,
+        requiredDocuments: @json($serviceType->required_documents ?? []),
+        uploadedDocuments: @entangle('documents'),
 
-                init() {
-                    this.updateProgress();
-                    this.$watch('form', () => {
-                        this.updateProgress();
-                    });
-                },
+        init() {
+            this.updateProgress();
+            this.$watch('form', () => this.updateProgress());
+            this.$watch('uploadedDocuments', () => this.updateProgress());
+        },
 
-                updateProgress() {
-                    let totalFields = 3; // service, title, description
-                    let filledFields = 0;
-                    
-                    if (this.form.selectedService) filledFields++;
-                    if (this.form.request_title && this.form.request_title.trim()) filledFields++;
-                    if (this.form.request_description && this.form.request_description.trim()) filledFields++;
-                    
-                    // Add lawyer field if required
-                    if (this.showLawyerSelection || @json($requiresLawyerSignature ?? false)) {
-                        totalFields++;
-                        if (this.form.selectedLawyer) filledFields++;
-                    }
-                    
-                    this.progress = Math.round((filledFields / totalFields) * 100);
-                },
+        updateProgress() {
+            let totalFields = 2; // title + description
+            let filledFields = 0;
+            
+            // Check basic fields
+            if (this.form.title && this.form.title.trim()) filledFields++;
+            if (this.form.description && this.form.description.trim()) filledFields++;
+            
+            // Add required documents to total
+            totalFields += this.requiredDocuments.length;
+            
+            // Count uploaded documents
+            Object.keys(this.uploadedDocuments || {}).forEach(key => {
+                if (this.uploadedDocuments[key]) filledFields++;
+            });
+            
+            this.progress = Math.round((filledFields / totalFields) * 100);
+        },
 
-                handleServiceChange() {
-                    this.validateField('selectedService');
-                    // The wire:change will handle the backend logic
-                },
-
-                get isFormValid() {
-                    const hasBasicFields = this.form.selectedService && 
-                                         this.form.request_title && 
-                                         this.form.request_description;
-                    
-                    const hasLawyerIfRequired = !(@json($requiresLawyerSignature ?? false)) || 
-                                              this.form.selectedLawyer;
-                    
-                    return hasBasicFields && hasLawyerIfRequired && Object.keys(this.errors).length === 0;
-                },
-
-                validateField(field) {
-                    this.errors = { ...this.errors };
-                    delete this.errors[field];
-                    
-                    switch(field) {
-                        case 'selectedService':
-                            if (!this.form.selectedService) {
-                                this.errors.selectedService = 'يرجى اختيار الخدمة';
-                            }
-                            break;
-                            
-                        case 'selectedLawyer':
-                            if ((@json($requiresLawyerSignature ?? false)) && !this.form.selectedLawyer) {
-                                this.errors.selectedLawyer = 'يرجى اختيار المحامي';
-                            }
-                            break;
-                            
-                        case 'request_title':
-                            if (!this.form.request_title || !this.form.request_title.trim()) {
-                                this.errors.request_title = 'عنوان الطلب مطلوب';
-                            } else if (this.form.request_title.trim().length < 10) {
-                                this.errors.request_title = 'العنوان قصير جداً (10 أحرف على الأقل)';
-                            }
-                            break;
-                            
-                        case 'request_description':
-                            if (!this.form.request_description || !this.form.request_description.trim()) {
-                                this.errors.request_description = 'وصف الطلب مطلوب';
-                            } else if (this.form.request_description.trim().length < 20) {
-                                this.errors.request_description = 'الوصف قصير جداً (20 حرف على الأقل)';
-                            }
-                            break;
-                    }
-                },
-
-                handleFileUpload(event) {
-                    const files = Array.from(event.target.files);
-                    const maxSize = 10 * 1024 * 1024; // 10MB
-                    const allowedTypes = [
-                        'application/pdf',
-                        'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'image/jpeg',
-                        'image/jpg',
-                        'image/png'
-                    ];
-                    
-                    files.forEach(file => {
-                        if (!allowedTypes.includes(file.type)) {
-                            alert(`نوع الملف ${file.name} غير مدعوم`);
-                            return;
-                        }
-                        
-                        if (file.size > maxSize) {
-                            alert(`الملف ${file.name} كبير جداً (أكثر من 10MB)`);
-                            return;
-                        }
-                        
-                        this.uploadedFiles.push(file);
-                    });
-                    
-                    // Clear the input
-                    event.target.value = '';
-                },
-
-                removeFile(index) {
-                    this.uploadedFiles.splice(index, 1);
-                },
-
-                handleSubmit() {
-                    this.loading = true;
-                    this.errors = {};
-                    
-                    // Validate all fields
-                    this.validateField('selectedService');
-                    this.validateField('request_title');
-                    this.validateField('request_description');
-                    
-                    if (@json($requiresLawyerSignature ?? false)) {
-                        this.validateField('selectedLawyer');
-                    }
-                    
-                    if (Object.keys(this.errors).length > 0) {
-                        this.loading = false;
-                        return;
-                    }
-                    
-                    // Form will be submitted by Livewire
-                    setTimeout(() => {
-                        this.loading = false;
-                    }, 3000);
+        get isFormValid() {
+            // Check basic fields
+            const hasTitle = this.form.title && this.form.title.trim().length >= 10;
+            const hasDescription = this.form.description && this.form.description.trim().length >= 20;
+            
+            // Check required documents
+            let hasAllDocuments = true;
+            for (let i = 0; i < this.requiredDocuments.length; i++) {
+                if (!this.uploadedDocuments || !this.uploadedDocuments[i]) {
+                    hasAllDocuments = false;
+                    break;
                 }
             }
-        }
-    </script>
+            
+            // Check no validation errors
+            const noErrors = Object.keys(this.errors).length === 0;
+            
+            return hasTitle && hasDescription && hasAllDocuments && noErrors;
+        },
 
-    <style>
-        [x-cloak] { display: none !important; }
-        
-        /* Custom animations */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+        validateField(field) {
+            // Clear existing error
+            delete this.errors[field];
+            
+            switch(field) {
+                case 'title':
+                    if (!this.form.title || !this.form.title.trim()) {
+                        this.errors.title = 'عنوان الطلب مطلوب';
+                    } else if (this.form.title.trim().length < 10) {
+                        this.errors.title = 'العنوان قصير جداً (10 أحرف على الأقل)';
+                    }
+                    break;
+                    
+                case 'description':
+                    if (!this.form.description || !this.form.description.trim()) {
+                        this.errors.description = 'وصف الطلب مطلوب';
+                    } else if (this.form.description.trim().length < 20) {
+                        this.errors.description = 'الوصف قصير جداً (20 حرف على الأقل)';
+                    }
+                    break;
+            }
+        },
+
+        submitForm() {
+            // Validate all fields before submission
+            this.validateField('title');
+            this.validateField('description');
+            
+            // If there are errors, don't submit
+            if (Object.keys(this.errors).length > 0) {
+                return false;
+            }
+            
+            // Let Livewire handle the actual submission
+            return true;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Textarea auto-resize */
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-        
-        /* File upload hover effects */
-        .file-upload-zone:hover {
-            background-color: #f8fafc;
-        }
-    </style>
+    }
+}
+</script>
+
+<style>
+[x-cloak] { display: none !important; }
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(-10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* File upload animations */
+.border-dashed {
+    transition: all 0.3s ease;
+}
+
+/* Progress bar animation */
+.bg-blue-600 {
+    transition: width 0.5s ease-in-out;
+}
+
+/* Button hover effects */
+button:not(:disabled):hover {
+    transform: translateY(-1px);
+}
+
+/* Custom scrollbar for textarea */
+textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+</style>
 </div>

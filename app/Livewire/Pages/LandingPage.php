@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Pages;
 
+use App\Models\ServiceType;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-// #[Layout('layouts.guest')]
+#[Layout('layouts.guest')]
 class LandingPage extends Component
 {
     public function render()
     {
-        return view('livewire.pages.landing-page')
-        ->layout('layouts.app');
+        $services = ServiceType::all();
+        return view('livewire.pages.landing-page', compact('services'));
     }
 }

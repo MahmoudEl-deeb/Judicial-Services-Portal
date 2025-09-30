@@ -3,27 +3,21 @@
 namespace App\Livewire\Lawyer;
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Auth;
 
-// #Layout[app-layout]
+#[Layout('layouts.dash')]
 class Dashboard extends Component
 {
+    public $user;
+
+    public function mount()
+    {
+        $this->user = Auth::user();
+    }
+
     public function render()
     {
-        return view('livewire.lawyer.dashboard')->layout('layouts.dash', [
-                'links' => [
-                    [
-                        'url' => route('lawyer.dashboard'),
-                        'label' => 'الرئيسية',
-                        'icon' => 'fas fa-home',
-                        'active' => 'lawyer/dashboard',
-                    ],
-                    [
-                        'url' => route('lawyer.dashboard'),
-                        'label' => 'القضايا',
-                        'icon' => 'fas fa-gavel',
-                        'active' => 'lawyer/cases*',
-                    ],
-                ],
-            ]);
+        return view('livewire.lawyer.dashboard');
     }
 }

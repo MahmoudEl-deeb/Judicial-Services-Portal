@@ -133,7 +133,7 @@
                                 
                                 <div class="flex justify-between items-center">
                                     <a 
-                                        href="#"
+                                        href="{{ route('services.create', [ 'id' => $service->id ]) }}"
                                         class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
                                         onclick="event.stopPropagation()"
                                     >

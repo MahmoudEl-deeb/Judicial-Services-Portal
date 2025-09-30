@@ -12,15 +12,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.guest')]
 class Register extends Component
 {
+    use WithFileUploads;
+
     // الحقول
     public $first_name, $last_name, $email, $password, $password_confirmation;
     public $national_id, $phone, $address, $city, $governorate, $zipcode;
     public $role = 'litigant';
-    public $bar_registration_number, $specialization;
+    public $bar_registration_number, $specialization, $bar_registration_image;
 
     /**
      * قواعد التحقق
@@ -40,6 +43,7 @@ class Register extends Component
         if ($this->role === 'lawyer') {
             $rules['bar_registration_number'] = ['required', 'string', 'unique:lawyers'];
             $rules['specialization'] = ['nullable', 'string', 'max:255'];
+            $rules['bar_registration_image'] = ['required', 'image'];
         }
 
         return $rules;
@@ -59,7 +63,6 @@ class Register extends Component
         $this->validate();
         $user = new User();
         try {
-            $this->role === 'lawyer' ? $user->status = 'pending' : $user->status = 'active';
             $user->first_name = $this->first_name;
             $user->last_name = $this->last_name;
             $user->email = $this->email;
@@ -70,6 +73,7 @@ class Register extends Component
             $user->governorate = $this->governorate;
             $user->zipcode = $this->zipcode;
             $user->password = Hash::make($this->password);
+            $user->status = $this->role === 'lawyer' ? 'inactive' : 'active';
             DB::beginTransaction();
             $user->save();
 
@@ -78,10 +82,13 @@ class Register extends Component
 
             // لو محامي أضيف بيانات المحامي
             if ($this->role === 'lawyer') {
+                $imagePath = $this->bar_registration_image->store('bar_registration_images', 'public');
+
                 Lawyer::create([
                     'user_id' => $user->id,
                     'bar_registration_number' => $this->bar_registration_number,
                     'specialization' => $this->specialization,
+                    'bar_registration_image' => $imagePath,
                 ]);
             }
             DB::commit();

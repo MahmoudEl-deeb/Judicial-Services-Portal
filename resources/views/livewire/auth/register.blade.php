@@ -340,7 +340,7 @@
                     <label for="bar_registration_image" class="block text-sm font-medium text-gray-700 mb-1">
                         صورة كارنيه النقابة <span class="text-red-500">*</span>
                     </label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-purple-400 transition-colors duration-300">
+                    <div x-show="!imagePreview" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-purple-400 transition-colors duration-300">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -352,13 +352,21 @@
                                            type="file" 
                                            wire:model.live="bar_registration_image" 
                                            @change="handleFileUpload($event)"
-                                           accept="image/*"
-                                           class="sr-only">
+                                           accept="image/png,image/jpeg"
+                                           class="sr-only"
+                                           x-ref="bar_registration_image">
                                 </label>
                                 <p class="pr-1">أو اسحب واسقط</p>
                             </div>
                             <p class="text-xs text-gray-500">PNG, JPG, JPEG حتى 5MB</p>
                         </div>
+                    </div>
+                    <div x-show="imagePreview" class="mt-2 text-center">
+                        <img :src="imagePreview" class="mx-auto h-32 rounded-md shadow-md">
+                        <button @click="removeImage" type="button" class="mt-2 text-sm text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash-alt ml-1"></i>
+                            إزالة الصورة
+                        </button>
                     </div>
                     @error('bar_registration_image') 
                         <span class="text-red-500 text-sm mt-1 flex items-center">
@@ -497,6 +505,7 @@
                 showPasswordConfirm: false,
                 passwordStrength: 0,
                 passwordStrengthText: '',
+                imagePreview: null,
 
                 init() {
                     this.updateProgress();
@@ -628,18 +637,32 @@
                         if (!allowedTypes.includes(file.type)) {
                             alert('نوع الملف غير مدعوم. يرجى رفع صورة بصيغة JPG أو PNG');
                             event.target.value = '';
+                            this.form.bar_registration_image = null;
+                            this.imagePreview = null;
                             return;
                         }
                         
                         if (file.size > maxSize) {
                             alert('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت');
                             event.target.value = '';
+                            this.form.bar_registration_image = null;
+                            this.imagePreview = null;
                             return;
                         }
                         
-                        // File is valid
-                        this.form.bar_registration_image = file;
+                        // File is valid, show preview
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imagePreview = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
                     }
+                },
+
+                removeImage() {
+                    this.form.bar_registration_image = null;
+                    this.imagePreview = null;
+                    this.$refs.bar_registration_image.value = '';
                 },
 
                 submitForm() {

@@ -12,12 +12,10 @@
 
             <!-- Links -->
             <div class="hidden md:flex space-x-8 text-lg">
+                <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600">الرئيسية</a>
                 <a href="#" class="text-gray-700 hover:text-blue-600">أخبارنا</a>
                 <a href="#" class="text-gray-700 hover:text-blue-600">عن المحكمة</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">الخدمات</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">تلفي</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">الشكاوي</a>
-                <a href="#" class="text-gray-700 hover:text-blue-600">شيء آخر</a>
+                <a href="{{ route('services') }}" class="text-gray-700 hover:text-blue-600">الخدمات</a>
             </div>
 
             <!-- Auth Section -->
@@ -63,4 +61,3 @@
         </div>
     </div>
 </nav>
-
