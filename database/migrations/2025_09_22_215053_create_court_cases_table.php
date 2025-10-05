@@ -49,6 +49,6 @@ public function up()
      */
     public function down(): void
     {
-        Schema::dropIfExists('court_cases');
+        Schema::dropIfExists('cases');
     }
 };

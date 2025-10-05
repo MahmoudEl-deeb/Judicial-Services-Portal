@@ -12,9 +12,9 @@ class JudgeFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->create()->assignRole('judge')->id,
             'judge_code' => 'J' . fake()->unique()->numberBetween(1000, 9999),
-            'department_id' => CassationDepartment::factory(),
+            'department_id' => fn() => CassationDepartment::inRandomOrder()->first()->id,
             'appointment_date' => fake()->dateTimeBetween('-10 years', '-1 year'),
         ];
     }

@@ -23,17 +23,11 @@ class LawyerFactory extends Factory
         ];
 
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->create()->assignRole('lawyer')->id,
             'bar_registration_number' => 'نقابة/' . fake()->unique()->numberBetween(10000, 99999),
             'bar_registration_image' => 'bar_registrations/' . fake()->uuid() . '.pdf',
             'specialization' => fake()->randomElement($arabicSpecializations),
-            'registration_date' => fake()->dateTimeBetween('-15 years', '-1 year'),
-            'license_status' => fake()->randomElement(['active', 'suspended', 'expired']),
         ];
     }
 
-    public function active()
-    {
-        return $this->state(['license_status' => 'active']);
-    }
 }

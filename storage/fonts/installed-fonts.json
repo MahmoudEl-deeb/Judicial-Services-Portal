@@ -1,0 +1,8 @@
+{
+    "dejavu sans": {
+        "bold": "\/home\/mahmoud\/Desktop\/projects\/JudicialServicesPortal\/vendor\/dompdf\/dompdf\/lib\/fonts\/DejaVuSans-Bold",
+        "bold_italic": "\/home\/mahmoud\/Desktop\/projects\/JudicialServicesPortal\/vendor\/dompdf\/dompdf\/lib\/fonts\/DejaVuSans-BoldOblique",
+        "italic": "\/home\/mahmoud\/Desktop\/projects\/JudicialServicesPortal\/vendor\/dompdf\/dompdf\/lib\/fonts\/DejaVuSans-Oblique",
+        "normal": "dejavu_sans_normal_082d8ad6f4521fde96f3e3e2bc125b42"
+    }
+}

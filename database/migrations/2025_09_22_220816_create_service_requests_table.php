@@ -23,28 +23,31 @@ public function up()
         $table->text('request_description')->nullable();
         $table->foreignId('related_case_id')->nullable()->constrained('cases');
         $table->enum('status', [
-            'pending','under_department_review','assigned_to_secretary','in_progress',
-            'pending_approval','approved','rejected','completed','cancelled','awaiting_payment'
-        ])->default('pending');
+            'pending_approval','approved','rejected','completed'
+        ])->default('pending_approval');
         $table->enum('priority', ['normal','urgent'])->default('normal');
-        // $table->enum('service_category', ['regular','urgent','prepaid'])->default('regular');
         $table->boolean('is_urgent_service')->default(false);
         $table->boolean('is_prepaid_service')->default(false);
-        // $table->decimal('urgent_service_multiplier', 8, 2)->default(1);
-        // $table->json('submitted_documents_meta')->nullable();
-        $table->decimal('base_fees_amount', 12, 2)->default(0);
-        $table->decimal('urgent_fees_amount', 12, 2)->default(0);
+                        $table->string('client_national_id')->nullable();
+                          $table->enum('payment_method', ['online', 'bank_transfer'])->default('online')->nullable();
+            $table->timestamp('submitted_at')->nullable();
+                        $table->string('power_of_attorney_path');
+            $table->integer( 'rest_days')->nullable();
+
+
+        // $table->decimal('base_fees_amount', 12, 2)->default(0);
+        // $table->decimal('urgent_fees_amount', 12, 2)->default(0);
         $table->decimal('total_fees_amount', 12, 2)->default(0);
-        $table->enum('payment_status', ['pending','partial_paid','paid','refunded','prepaid_balance_used'])->default('pending');
-        $table->date('requested_date')->nullable();
-        $table->date('assigned_to_secretary_date')->nullable();
-        $table->date('department_review_date')->nullable();
-        $table->date('expected_completion_date')->nullable();
-        $table->date('urgent_completion_deadline')->nullable();
-        $table->date('approved_date')->nullable();
-        $table->date('completed_date')->nullable();
-        $table->integer('processing_time_hours')->nullable();
-        $table->integer('urgent_processing_time_hours')->nullable();
+        $table->enum('payment_status', ['pending','paid'])->default('pending');
+        // $table->date('requested_date')->nullable();
+        // $table->date('assigned_to_secretary_date')->nullable();
+        // $table->date('department_review_date')->nullable();
+        // $table->date('expected_completion_date')->nullable();
+        // $table->date('urgent_completion_deadline')->nullable();
+        // $table->date('approved_date')->nullable();
+        // $table->date('completed_date')->nullable();
+        // $table->integer('processing_time_hours')->nullable();
+        // $table->integer('urgent_processing_time_hours')->nullable();
         $table->text('department_notes')->nullable();
         $table->text('secretary_notes')->nullable();
         $table->text('approval_notes')->nullable();

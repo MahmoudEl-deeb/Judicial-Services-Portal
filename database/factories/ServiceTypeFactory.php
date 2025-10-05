@@ -52,4 +52,4 @@ class ServiceTypeFactory extends Factory
     {
         return $this->state(['is_active' => true]);
     }
-}
+} 

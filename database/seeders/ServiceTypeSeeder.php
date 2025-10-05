@@ -1,96 +1,128 @@
-<?Php
+<?php
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\ServiceType;
 use App\Models\CassationDepartment;
-use Illuminate\Database\Seeder;
 
 class ServiceTypeSeeder extends Seeder
 {
     public function run(): void
     {
-        $services = [
-            [
-                'service_type_key' => 'APPEAL_FILING',
-                'service_name_ar' => 'تقديم طعن بالنقض',
-                'service_name_en' => 'Cassation Appeal Filing',
-                'description_ar' => 'خدمة تقديم الطعون بالنقض أمام محكمة النقض ضد الأحكام الصادرة من المحاكم الأدنى',
-                'description_en' => 'Service for filing cassation appeals against lower court judgments',
-                'cassation_service_type' => 'cassation_appeal_filing',
-                'required_documents' => json_encode([
-                    'صورة البطاقة الشخصية',
+        $serviceTypes = [
+            'cassation_appeal_filing' => [
+                'تقديم طعن بالنقض',
+                'Cassation Appeal Filing',
+                'خدمة تقديم الطعون بالنقض أمام محكمة النقض',
+                'civil',
+                [
+                    'صحيفة الطعن الأصلية موقعة من المحامي',
+                    'صورة رسمية من الحكم المطعون فيه',
+                    'صورة البطاقة الشخصية للمحامي أو التوكيل',
+                ],
+            ],
+            'cassation_case_status' => [
+                'الاستعلام عن حالة القضية',
+                'Cassation Case Status',
+                'خدمة الاستعلام عن الحالة الحالية للقضايا المرفوعة',
+                'administrative',
+                [
+                    'رقم القضية أو رقم الطعن',
+                    'صورة بطاقة مقدم الطلب',
+                ],
+            ],
+            'cassation_judgment_copy' => [
+                'صورة طبق الأصل من الحكم',
+                'Cassation Judgment Copy',
+                'الحصول على صورة معتمدة من الأحكام الصادرة',
+                'civil',
+                [
+                    'طلب رسمي موقع من المحامي أو صاحب الشأن',
+                    'صورة من الحكم',
+                ],
+            ],
+            'cassation_hearing_certificate' => [
+                'شهادة حضور جلسة',
+                'Cassation Hearing Certificate',
+                'شهادة بحضور جلسات المحاكمة',
+                'criminal',
+                [
+                    'طلب كتابي باسم المحكمة',
+                    'بطاقة هوية أو توكيل رسمي',
+                ],
+            ],
+            'cassation_case_extract' => [
+                'مستخرج قضية',
+                'Cassation Case Extract',
+                'مستخرج كامل لبيانات القضية',
+                'administrative',
+                [
+                    'طلب استخراج موقع من المحامي',
+                    'بيانات القضية (رقم، سنة، نوع)',
+                ],
+            ],
+            'cassation_execution_order' => [
+                'أمر تنفيذ الحكم',
+                'Cassation Execution Order',
+                'إصدار أمر تنفيذ الأحكام النهائية',
+                'commercial',
+                [
+                    'نسخة تنفيذية من الحكم',
+                    'محضر إعلان الحكم',
                     'توكيل المحامي',
-                    'صورة الحكم المطعون فيه',
-                    'مذكرة الطعن'
-                ]),
-                'base_fee' => 500.00,
-                'processing_days' => 7,
-                'allows_urgent' => true,
-                'requires_lawyer_signature' => true,
+                ],
             ],
-            [
-                'service_type_key' => 'CASE_STATUS',
-                'service_name_ar' => 'الاستعلام عن حالة القضية',
-                'service_name_en' => 'Case Status Inquiry',
-                'description_ar' => 'خدمة الاستعلام عن الحالة الحالية للقضايا المرفوعة أمام محكمة النقض',
-                'description_en' => 'Service for inquiring about the current status of cassation cases',
-                'cassation_service_type' => 'cassation_case_status',
-                'required_documents' => json_encode([
-                    'صورة البطاقة الشخصية',
-                    'رقم القضية'
-                ]),
-                'base_fee' => 50.00,
-                'processing_days' => 1,
-                'allows_urgent' => true,
-                'requires_case_reference' => true,
+            'cassation_legal_memo' => [
+                'مذكرة قانونية',
+                'Legal Memorandum',
+                'إعداد المذكرات القانونية للقضايا',
+                'civil',
+                [
+                    'توكيل المحامي',
+                    'مستندات القضية كاملة',
+                    'ملخص بالطلبات القانونية',
+                ],
             ],
-            [
-                'service_type_key' => 'JUDGMENT_COPY',
-                'service_name_ar' => 'صورة طبق الأصل من الحكم',
-                'service_name_en' => 'Certified Judgment Copy',
-                'description_ar' => 'الحصول على صورة معتمدة طبق الأصل من الأحكام الصادرة من محكمة النقض',
-                'description_en' => 'Obtaining certified copies of cassation court judgments',
-                'cassation_service_type' => 'cassation_judgment_copy',
-                'required_documents' => json_encode([
-                    'صورة البطاقة الشخصية',
-                    'رقم الحكم',
-                    'إيصال سداد الرسوم'
-                ]),
-                'base_fee' => 100.00,
-                'processing_days' => 3,
-                'allows_urgent' => true,
-                'requires_case_reference' => true,
-            ],
-            [
-                'service_type_key' => 'HEARING_CERTIFICATE',
-                'service_name_ar' => 'شهادة حضور جلسة',
-                'service_name_en' => 'Hearing Attendance Certificate',
-                'description_ar' => 'إصدار شهادة بحضور جلسات المحاكمة أمام محكمة النقض',
-                'description_en' => 'Issuing certificates of attendance at cassation court hearings',
-                'cassation_service_type' => 'cassation_hearing_certificate',
-                'required_documents' => json_encode([
-                    'صورة البطاقة الشخصية',
-                    'رقم القضية',
-                    'تاريخ الجلسة'
-                ]),
-                'base_fee' => 75.00,
-                'processing_days' => 2,
-                'allows_urgent' => false,
-                'requires_case_reference' => true,
+            'cassation_precedent_search' => [
+                'بحث في السوابق القضائية',
+                'Precedent Search',
+                'البحث في السوابق القضائية ذات الصلة',
+                'constitutional',
+                [
+                    'موضوع البحث القانوني',
+                    'مذكرة بطلب البحث',
+                ],
             ],
         ];
 
-        foreach ($services as $service) {
-            ServiceType::create(array_merge($service, [
-                'responsible_department_id' => CassationDepartment::inRandomOrder()->first()->id,
-                'urgent_fee_multiplier' => 2.0,
-                'urgent_processing_hours' => 24,
-                'is_active' => true,
-            ]));
-        }
+        foreach ($serviceTypes as $key => $data) {
+            [$nameAr, $nameEn, $descAr, $deptType, $docs] = $data;
 
-        // Create additional service types
-        ServiceType::factory()->active()->count(15)->create();
+            $department = CassationDepartment::where('department_type', $deptType)->first();
+
+            ServiceType::updateOrCreate(
+                ['cassation_service_type' => $key],
+                [
+                    'service_type_key' => strtoupper(str_replace('_', '', $key)) . '001',
+                    'service_name_ar' => $nameAr,
+                    'service_name_en' => $nameEn,
+                    'description_ar' => $descAr,
+                    'description_en' => 'Service description in English',
+                    'responsible_department_id' => $department?->id,
+                    'required_documents' => $docs, // مختلف لكل خدمة
+                    'base_fee' => 500.00,
+                    'urgent_fee_multiplier' => 2.0,
+                    'processing_days' => 14,
+                    'urgent_processing_days' => 3,
+                    'allows_urgent' => true,
+                    'requires_case_reference' => true,
+                    'requires_lawyer_signature' => in_array($key, ['cassation_appeal_filing', 'cassation_legal_memo']),
+                    'requires_department_approval' => in_array($key, ['cassation_execution_order', 'cassation_precedent_search']),
+                    'is_prepaid_service' => in_array($key, ['cassation_case_status', 'cassation_hearing_certificate']),
+                    'is_active' => true,
+                ]
+            );
+        }
     }
 }

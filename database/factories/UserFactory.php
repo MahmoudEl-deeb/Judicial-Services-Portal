@@ -1,45 +1,98 @@
 <?php
 
-// database/factories/UserFactory.php
 namespace Database\Factories;
 
+use App\Models\Team;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Jetstream\Features;
 
 class UserFactory extends Factory
 {
+    protected static ?string $password;
+
     public function definition(): array
     {
-        $arabicFirstNames = [
-            'أحمد', 'محمد', 'علي', 'حسن', 'حسام', 'خالد', 'عمر', 'يوسف', 'إبراهيم', 'عبدالله',
-            'فاطمة', 'عائشة', 'خديجة', 'مريم', 'زينب', 'سارة', 'نور', 'هند', 'ليلى', 'آمال'
+        // لستة محافظات مصرية
+        $governorates = [
+            'القاهرة', 'الجيزة', 'الإسكندرية', 'الدقهلية', 'البحيرة', 'الغربية', 'الشرقية',
+            'المنوفية', 'القليوبية', 'كفر الشيخ', 'دمياط', 'بورسعيد', 'الإسماعيلية', 'السويس',
+            'الفيوم', 'بني سويف', 'المنيا', 'أسيوط', 'سوهاج', 'قنا', 'الأقصر', 'أسوان',
+            'البحر الأحمر', 'الوادي الجديد', 'مطروح', 'شمال سيناء', 'جنوب سيناء'
         ];
-        
-        $arabicLastNames = [
-            'المصري', 'أحمد', 'محمد', 'علي', 'حسن', 'عبدالرحمن', 'الشريف', 'العربي', 'السيد', 
-            'إبراهيم', 'عثمان', 'الطاهر', 'المحمدي', 'الأحمدي', 'العلي', 'الحسني', 'القاضي'
-        ];
+
+        // اختار محافظة عشوائية
+        $gov = fake()->randomElement($governorates);
 
         return [
-            'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make('password'),
-            'first_name' => fake()->randomElement($arabicFirstNames),
-            'last_name' => fake()->randomElement($arabicLastNames),
-            'national_id' => fake()->unique()->numerify('##############'),
-            'phone' => '+2' . fake()->randomElement(['01', '02', '03']) . fake()->numerify('#########'),
-            'status' => fake()->randomElement(['active', 'inactive', 'suspended']),
-            'email_verified_at' => fake()->optional()->dateTimeBetween('-1 year', 'now'),
+            'first_name'        => fake('ar_EG')->firstName(),
+            'last_name'         => fake('ar_EG')->lastName(),
+            'email'             => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password'          => static::$password ??= Hash::make('password'),
+
+            // رقم قومي (14 رقم يبدأ غالباً بـ 2 أو 3)
+            'national_id'       => fake()->unique()->numerify(fake()->randomElement(['2#############','3#############'])),
+
+            // رقم موبايل مصري (010, 011, 012, 015)
+            'phone'             => fake()->numerify(fake()->randomElement(['010########','011########','012########','015########'])),
+
+            'status'            => 'active',
+
+            // عناوين مصرية بسيطة
+            'address'           => fake('ar_EG')->streetName().' - '.$gov,
+            'city'              => fake('ar_EG')->city(),
+            'governorate'       => $gov,
+            'zipcode'           => fake()->numerify('#####'), // ممكن تسيبها أرقام عشوائية
+
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'remember_token'    => Str::random(10),
+            'profile_photo_path'=> null,
+            'current_team_id'   => null,
         ];
     }
 
-    public function active()
+    public function unverified(): static
     {
-        return $this->state(['status' => 'active']);
+        return $this->state(fn (array $attributes) => [
+            'email_verified_at' => null,
+        ]);
     }
 
-    public function verified()
+    public function withPersonalTeam(?callable $callback = null): static
     {
-        return $this->state(['email_verified_at' => now()]);
+        if (! Features::hasTeamFeatures()) {
+            return $this->state([]);
+        }
+
+        return $this->has(
+            Team::factory()
+                ->state(fn (array $attributes, User $user) => [
+                    'name' => $user->first_name.' '.$user->last_name.'\'s Team',
+                    'user_id' => $user->id,
+                    'personal_team' => true,
+                ])
+                ->when(is_callable($callback), $callback),
+            'ownedTeams'
+        );
+    }
+
+    // States
+    public function active(): static
+    {
+        return $this->state(fn () => ['status' => 'active']);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn () => ['status' => 'inactive']);
+    }
+
+    public function suspended(): static
+    {
+        return $this->state(fn () => ['status' => 'suspended']);
     }
 }

@@ -11,10 +11,10 @@ class JudgeSercretoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => User::factory()->create()->assignRole('judge_secretary')->id,
             'employee_id' => 'EMP' . fake()->unique()->numberBetween(1000, 9999),
-            'judge_id' => null, // Will be set in seeder
-            'department_id' => CassationDepartment::factory(),
+            'judge_id' => fn() => Judge::inRandomOrder()->first()->id,
+            'department_id' => fn() => CassationDepartment::inRandomOrder()->first()->id,
         ];
     }
 }

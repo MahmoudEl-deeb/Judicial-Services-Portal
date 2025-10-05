@@ -12,6 +12,7 @@ class Lawyer extends Model
     protected $fillable = [
         'user_id',
         'bar_registration_number',
+        'bar_registration_image',
         'law_firm_name',
         'specialization',
         'registration_date',
@@ -26,5 +27,10 @@ class Lawyer extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function cases()
+    {
+        return $this->belongsToMany(CourtCase::class, 'case_lawyer');
     }
 }
