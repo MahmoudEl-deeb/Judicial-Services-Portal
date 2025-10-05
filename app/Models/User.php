@@ -83,10 +83,25 @@ class User extends Authenticatable implements MustVerifyEmail
         } elseif ($this->hasRole('admin')) {
             return route('admin.dashboard');
         }
-        return route('dashboard');
+        return '/';
     }
     public function lawyer()
 {
     return $this->hasOne(\App\Models\Lawyer::class);
+}
+
+public function litigant()
+{
+    return $this->hasOne(\App\Models\Litigant::class);
+}
+
+public function cases()
+{
+    if ($this->hasRole('lawyer')) {
+        return $this->lawyer->cases();
+    } elseif ($this->hasRole('litigant')) {
+        return $this->litigant->cases();
+    }
+    return null;
 }
 }

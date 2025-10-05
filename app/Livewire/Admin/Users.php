@@ -32,6 +32,30 @@ class Users extends Component
         $this->resetPage();
     }
 
+    public function getStatistics()
+    {
+        return [
+            'totalUsers' => User::count(),
+            'activeUsers' => User::where('status', 'active')->count(),
+            'pendingUsers' => User::where('status', 'pending')->count(),
+            'suspendedUsers' => User::where('status', 'suspended')->count(),
+            'lawyerUsers' => User::role('lawyer')->count(),
+            'clientUsers' => User::role('litigant')->count(),
+            'adminUsers' => User::role('admin')->count(),
+        ];
+    }
+
+    public function getRolesWithArabic()
+    {
+        return [
+            'admin' => 'مسؤول',
+            'lawyer' => 'محامي',
+            'client' => 'عميل',
+            'user' => 'مستخدم',
+            'moderator' => 'مشرف',
+        ];
+    }
+
     public function render()
     {
         $users = User::query()
@@ -43,13 +67,18 @@ class Users extends Component
             })
             ->when($this->status, fn ($query, $status) => $query->where('status', $status))
             ->when($this->role, fn ($query, $role) => $query->role($role))
-            ->simplePaginate(10);
+            ->with('roles')
+            ->paginate(10);
 
         $roles = Role::all();
+        $statistics = $this->getStatistics();
+        $arabicRoles = $this->getRolesWithArabic();
 
         return view('livewire.admin.users', [
             'users' => $users,
             'roles' => $roles,
+            'statistics' => $statistics,
+            'arabicRoles' => $arabicRoles,
         ]);
     }
 }

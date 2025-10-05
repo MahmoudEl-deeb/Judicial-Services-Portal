@@ -1,26 +1,26 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100" x-data="registrationForm()" x-init="init()">
-    <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-lg shadow-lg">
+<div class="min-h-screen flex items-center justify-center bg-[#F8FAFC] py-8" x-data="registrationForm()" x-init="init()">
+    <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-2xl shadow-custom border border-gray-100 mx-4">
         
         <!-- Header -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                <i class="fas fa-balance-scale text-2xl text-blue-600"></i>
+            <div class="inline-flex items-center justify-center w-20 h-20 gold-bg rounded-full mb-4 shadow-lg">
+                <i class="fas fa-balance-scale text-2xl text-white"></i>
             </div>
-            <h1 class="text-2xl font-bold text-gray-800 mb-2">محكمة النقض المصرية</h1>
-            <p class="text-gray-600">إنشاء حساب جديد</p>
+            <h1 class="text-3xl font-bold grey-dark-text mb-2">إنشاء حساب جديد</h1>
+            <p class="text-lg grey-medium-text">انضم إلى نظام محكمة النقض الإلكتروني</p>
         </div>
 
         <!-- Progress Bar -->
         <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
+            <div class="gold-bg h-2 rounded-full transition-all duration-300" :style="`width: ${progress}%`"></div>
         </div>
 
         <!-- Display validation errors -->
         <div x-show="Object.keys(errors).length > 0" 
              x-transition
-             class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <div class="flex">
-                <i class="fas fa-exclamation-triangle text-red-400 ml-2 mt-1"></i>
+             class="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-400 ml-2"></i>
                 <div>
                     <h3 class="text-sm font-medium text-red-800">يرجى تصحيح الأخطاء التالية:</h3>
                     <div class="mt-2 text-sm text-red-700">
@@ -38,8 +38,9 @@
 
             <!-- Name Fields -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="first_name" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-user gold-text ml-2"></i>
                         الاسم الأول <span class="text-red-500">*</span>
                     </label>
                     <input id="first_name" 
@@ -47,19 +48,20 @@
                            wire:model.live="first_name" 
                            x-model="form.first_name"
                            @blur="validateField('first_name')"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
                            placeholder="أدخل الاسم الأول"
                            autofocus 
                            autocomplete="given-name">
                     @error('first_name') 
-                        <span class="text-red-500 text-sm mt-1 flex items-center">
+                        <span class="text-red-500 text-sm flex items-center">
                             <i class="fas fa-exclamation-circle ml-1"></i>
                             {{ $message }}
                         </span> 
                     @enderror
                 </div>
-                <div>
-                    <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="last_name" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-user gold-text ml-2"></i>
                         الاسم الأخير <span class="text-red-500">*</span>
                     </label>
                     <input id="last_name" 
@@ -67,11 +69,11 @@
                            wire:model.live="last_name" 
                            x-model="form.last_name"
                            @blur="validateField('last_name')"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
                            placeholder="أدخل الاسم الأخير"
                            autocomplete="family-name">
                     @error('last_name') 
-                        <span class="text-red-500 text-sm mt-1 flex items-center">
+                        <span class="text-red-500 text-sm flex items-center">
                             <i class="fas fa-exclamation-circle ml-1"></i>
                             {{ $message }}
                         </span> 
@@ -80,136 +82,123 @@
             </div>
 
             <!-- Email -->
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+            <div class="space-y-2">
+                <label for="email" class="block text-sm font-bold grey-dark-text">
+                    <i class="fas fa-envelope gold-text ml-2"></i>
                     البريد الإلكتروني <span class="text-red-500">*</span>
                 </label>
-                <input id="email" 
-                       type="email" 
-                       wire:model.live="email" 
-                       x-model="form.email"
-                       @blur="validateField('email')"
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="example@email.com"
-                       autocomplete="email">
+                <div class="relative">
+                    <input id="email" 
+                           type="email" 
+                           wire:model.live="email" 
+                           x-model="form.email"
+                           @blur="validateField('email')"
+                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
+                           placeholder="example@email.com"
+                           autocomplete="email">
+                    <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
                 @error('email') 
-                    <span class="text-red-500 text-sm mt-1 flex items-center">
+                    <span class="text-red-500 text-sm flex items-center">
                         <i class="fas fa-exclamation-circle ml-1"></i>
                         {{ $message }}
                     </span> 
                 @enderror
             </div>
 
-            <!-- National ID -->
-            <div>
-                <label for="national_id" class="block text-sm font-medium text-gray-700 mb-1">
-                    الرقم القومي <span class="text-red-500">*</span>
-                </label>
-                <input id="national_id" 
-                       type="text" 
-                       wire:model.live="national_id" 
-                       x-model="form.national_id"
-                       @input="form.national_id = form.national_id.replace(/[^0-9]/g, '').substring(0, 14)"
-                       @blur="validateField('national_id')"
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="14 رقم"
-                       maxlength="14"
-                       autocomplete="off">
-                @error('national_id') 
-                    <span class="text-red-500 text-sm mt-1 flex items-center">
-                        <i class="fas fa-exclamation-circle ml-1"></i>
-                        {{ $message }}
-                    </span> 
-                @enderror
-            </div>
+            <!-- National ID & Phone -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label for="national_id" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-id-card gold-text ml-2"></i>
+                        الرقم القومي <span class="text-red-500">*</span>
+                    </label>
+                    <input id="national_id" 
+                           type="text" 
+                           wire:model.live="national_id" 
+                           x-model="form.national_id"
+                           @input="form.national_id = form.national_id.replace(/[^0-9]/g, '').substring(0, 14)"
+                           @blur="validateField('national_id')"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
+                           placeholder="14 رقم"
+                           maxlength="14"
+                           autocomplete="off">
+                    @error('national_id') 
+                        <span class="text-red-500 text-sm flex items-center">
+                            <i class="fas fa-exclamation-circle ml-1"></i>
+                            {{ $message }}
+                        </span> 
+                    @enderror
+                </div>
 
-            <!-- Phone -->
-            <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
-                    رقم الهاتف <span class="text-red-500">*</span>
-                </label>
-                <input id="phone" 
-                       type="text" 
-                       wire:model.live="phone" 
-                       x-model="form.phone"
-                       @input="form.phone = form.phone.replace(/[^0-9+]/g, '')"
-                       @blur="validateField('phone')"
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="01xxxxxxxxx"
-                       autocomplete="tel">
-                @error('phone') 
-                    <span class="text-red-500 text-sm mt-1 flex items-center">
-                        <i class="fas fa-exclamation-circle ml-1"></i>
-                        {{ $message }}
-                    </span> 
-                @enderror
+                <div class="space-y-2">
+                    <label for="phone" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-phone gold-text ml-2"></i>
+                        رقم الهاتف <span class="text-red-500">*</span>
+                    </label>
+                    <input id="phone" 
+                           type="text" 
+                           wire:model.live="phone" 
+                           x-model="form.phone"
+                           @input="form.phone = form.phone.replace(/[^0-9+]/g, '')"
+                           @blur="validateField('phone')"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
+                           placeholder="01xxxxxxxxx"
+                           autocomplete="tel">
+                    @error('phone') 
+                        <span class="text-red-500 text-sm flex items-center">
+                            <i class="fas fa-exclamation-circle ml-1"></i>
+                            {{ $message }}
+                        </span> 
+                    @enderror
+                </div>
             </div>
 
             <!-- Address Info -->
-            <div>
-                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">
+            <div class="space-y-2">
+                <label for="address" class="block text-sm font-bold grey-dark-text">
+                    <i class="fas fa-home gold-text ml-2"></i>
                     العنوان
                 </label>
                 <input id="address" 
                        type="text" 
                        wire:model.live="address" 
                        x-model="form.address"
-                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300"
                        placeholder="رقم المنزل - الشارع - الحي">
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label for="city" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="city" class="block text-sm font-bold grey-dark-text">
                         المدينة
                     </label>
                     <input id="city" 
                            type="text" 
                            wire:model.live="city" 
                            x-model="form.city"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300"
                            placeholder="أدخل المدينة">
                 </div>
-                <div>
-                    <label for="governorate" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="governorate" class="block text-sm font-bold grey-dark-text">
                         المحافظة
                     </label>
                     <select id="governorate" 
                             wire:model.live="governorate" 
                             x-model="form.governorate"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300">
                         <option value="">اختر المحافظة</option>
                         <option value="cairo">القاهرة</option>
                         <option value="giza">الجيزة</option>
                         <option value="alexandria">الإسكندرية</option>
-                        <option value="qalyubia">القليوبية</option>
-                        <option value="dakahlia">الدقهلية</option>
-                        <option value="sharqia">الشرقية</option>
-                        <option value="gharbia">الغربية</option>
-                        <option value="kafr_el_sheikh">كفر الشيخ</option>
-                        <option value="beheira">البحيرة</option>
-                        <option value="monufia">المنوفية</option>
-                        <option value="damietta">دمياط</option>
-                        <option value="port_said">بورسعيد</option>
-                        <option value="ismailia">الإسماعيلية</option>
-                        <option value="suez">السويس</option>
-                        <option value="north_sinai">شمال سيناء</option>
-                        <option value="south_sinai">جنوب سيناء</option>
-                        <option value="red_sea">البحر الأحمر</option>
-                        <option value="matrouh">مطروح</option>
-                        <option value="fayyum">الفيوم</option>
-                        <option value="beni_suef">بني سويف</option>
-                        <option value="minya">المنيا</option>
-                        <option value="asyut">أسيوط</option>
-                        <option value="sohag">سوهاج</option>
-                        <option value="qena">قنا</option>
-                        <option value="luxor">الأقصر</option>
-                        <option value="aswan">أسوان</option>
-                        <option value="new_valley">الوادي الجديد</option>
+                        <!-- Add other governorates -->
                     </select>
                 </div>
-                <div>
-                    <label for="zipcode" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="zipcode" class="block text-sm font-bold grey-dark-text">
                         الرمز البريدي
                     </label>
                     <input id="zipcode" 
@@ -217,54 +206,59 @@
                            wire:model.live="zipcode" 
                            x-model="form.zipcode"
                            @input="form.zipcode = form.zipcode.replace(/[^0-9]/g, '').substring(0, 5)"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300"
                            placeholder="12345"
                            maxlength="5">
                 </div>
             </div>
 
             <!-- Role Selection -->
-            <div>
-                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">
-                    الدور <span class="text-red-500">*</span>
+            <div class="space-y-3">
+                <label class="block text-sm font-bold grey-dark-text">
+                    <i class="fas fa-user-tag gold-text ml-2"></i>
+                    نوع المستخدم <span class="text-red-500">*</span>
                 </label>
-                <div class="mt-2 space-y-3">
-                    <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="relative">
                         <input type="radio" 
                                wire:model.live="role" 
                                x-model="form.role"
                                value="litigant" 
-                               class="text-blue-600 focus:ring-blue-500 border-gray-300 ml-3">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center ml-3">
-                                <i class="fas fa-user text-blue-600"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm font-medium text-gray-900">متقاضي</div>
-                                <div class="text-sm text-gray-500">للمواطنين العاديين</div>
+                               class="sr-only peer">
+                        <div class="p-4 border-2 border-gray-300 rounded-xl cursor-pointer transition-all duration-300 hover:border-gold-primary hover:bg-amber-50 peer-checked:border-gold-primary peer-checked:bg-amber-50 peer-checked:ring-2 peer-checked:ring-gold-primary peer-checked:ring-opacity-20">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center ml-3">
+                                    <i class="fas fa-user gold-text"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold grey-dark-text">متقاضي</div>
+                                    <div class="text-sm grey-medium-text mt-1">للمواطنين العاديين</div>
+                                </div>
                             </div>
                         </div>
                     </label>
-                    
-                    <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+
+                    <label class="relative">
                         <input type="radio" 
                                wire:model.live="role" 
                                x-model="form.role"
                                value="lawyer" 
-                               class="text-blue-600 focus:ring-blue-500 border-gray-300 ml-3">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center ml-3">
-                                <i class="fas fa-briefcase text-purple-600"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm font-medium text-gray-900">محامي</div>
-                                <div class="text-sm text-gray-500">للمحامين المرخصين</div>
+                               class="sr-only peer">
+                        <div class="p-4 border-2 border-gray-300 rounded-xl cursor-pointer transition-all duration-300 hover:border-gold-primary hover:bg-amber-50 peer-checked:border-gold-primary peer-checked:bg-amber-50 peer-checked:ring-2 peer-checked:ring-gold-primary peer-checked:ring-opacity-20">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center ml-3">
+                                    <i class="fas fa-briefcase gold-text"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold grey-dark-text">محامي</div>
+                                    <div class="text-sm grey-medium-text mt-1">للمحامين المرخصين</div>
+                                </div>
                             </div>
                         </div>
                     </label>
                 </div>
                 @error('role') 
-                    <span class="text-red-500 text-sm mt-1 flex items-center">
+                    <span class="text-red-500 text-sm flex items-center">
                         <i class="fas fa-exclamation-circle ml-1"></i>
                         {{ $message }}
                     </span> 
@@ -279,16 +273,16 @@
                  x-transition:leave="transition ease-in duration-200"
                  x-transition:leave-start="opacity-100 transform translate-y-0"
                  x-transition:leave-end="opacity-0 transform -translate-y-4"
-                 class="space-y-4 p-6 bg-purple-50 border border-purple-200 rounded-lg">
+                 class="p-6 bg-amber-50 border border-amber-200 rounded-xl space-y-4">
                 
                 <div class="flex items-center mb-4">
-                    <i class="fas fa-gavel text-purple-600 text-lg ml-2"></i>
-                    <h3 class="text-lg font-semibold text-gray-800">بيانات المحاماة</h3>
+                    <i class="fas fa-gavel gold-text text-lg ml-2"></i>
+                    <h3 class="text-lg font-bold grey-dark-text">بيانات المحاماة</h3>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="bar_registration_number" class="block text-sm font-medium text-gray-700 mb-1">
+                    <div class="space-y-2">
+                        <label for="bar_registration_number" class="block text-sm font-bold grey-dark-text">
                             رقم القيد بالنقابة <span class="text-red-500">*</span>
                         </label>
                         <input id="bar_registration_number" 
@@ -296,25 +290,25 @@
                                wire:model.live="bar_registration_number" 
                                x-model="form.bar_registration_number"
                                @blur="validateField('bar_registration_number')"
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300"
                                placeholder="رقم القيد في النقابة">
                         @error('bar_registration_number') 
-                            <span class="text-red-500 text-sm mt-1 flex items-center">
+                            <span class="text-red-500 text-sm flex items-center">
                                 <i class="fas fa-exclamation-circle ml-1"></i>
                                 {{ $message }}
                             </span> 
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="specialization" class="block text-sm font-medium text-gray-700 mb-1">
+                    <div class="space-y-2">
+                        <label for="specialization" class="block text-sm font-bold grey-dark-text">
                             التخصص <span class="text-red-500">*</span>
                         </label>
                         <select id="specialization" 
                                 wire:model.live="specialization" 
                                 x-model="form.specialization"
                                 @blur="validateField('specialization')"
-                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300">
                             <option value="">اختر التخصص</option>
                             <option value="civil">القانون المدني</option>
                             <option value="criminal">القانون الجنائي</option>
@@ -322,13 +316,9 @@
                             <option value="administrative">القانون الإداري</option>
                             <option value="labor">قانون العمل</option>
                             <option value="family">قانون الأسرة</option>
-                            <option value="tax">القانون الضريبي</option>
-                            <option value="constitutional">القانون الدستوري</option>
-                            <option value="international">القانون الدولي</option>
-                            <option value="other">أخرى</option>
                         </select>
                         @error('specialization') 
-                            <span class="text-red-500 text-sm mt-1 flex items-center">
+                            <span class="text-red-500 text-sm flex items-center">
                                 <i class="fas fa-exclamation-circle ml-1"></i>
                                 {{ $message }}
                             </span> 
@@ -336,32 +326,29 @@
                     </div>
                 </div>
 
-                <div>
-                    <label for="bar_registration_image" class="block text-sm font-medium text-gray-700 mb-1">
-                        صورة كارنيه النقابة <span class="text-red-500">*</span>
+                <div class="space-y-2">
+                    <label for="bar_registration_image" class="block text-sm font-bold grey-dark-text">
+                        صورة بطاقة المحاماة <span class="text-red-500">*</span>
                     </label>
-                    <div x-show="!imagePreview" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-purple-400 transition-colors duration-300">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="bar_registration_image" class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none">
-                                    <span>رفع صورة</span>
-                                    <input id="bar_registration_image" 
-                                           type="file" 
+                    <div x-show="!imagePreview" class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center transition-all duration-300 hover:border-gold-primary hover:bg-amber-50">
+                        <div class="space-y-3">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400"></i>
+                            <div>
+                                <label for="bar_registration_image" class="cursor-pointer font-medium text-gold-primary hover:text-gold-secondary transition-colors">
+                                    <span>اختر ملف صورة البطاقة</span>
+                                    <input type="file" 
+                                           id="bar_registration_image" 
                                            wire:model.live="bar_registration_image" 
                                            @change="handleFileUpload($event)"
-                                           accept="image/png,image/jpeg"
-                                           class="sr-only"
-                                           x-ref="bar_registration_image">
+                                           accept="image/*"
+                                           class="hidden">
                                 </label>
-                                <p class="pr-1">أو اسحب واسقط</p>
+                                <span class="text-gray-600"> أو اسحب الملف هنا</span>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, JPEG حتى 5MB</p>
+                            <p class="text-xs text-gray-500">JPG, PNG, GIF حتى 10MB</p>
                         </div>
                     </div>
-                    <div x-show="imagePreview" class="mt-2 text-center">
+                    <div x-show="imagePreview" class="text-center">
                         <img :src="imagePreview" class="mx-auto h-32 rounded-md shadow-md">
                         <button @click="removeImage" type="button" class="mt-2 text-sm text-red-500 hover:text-red-700">
                             <i class="fas fa-trash-alt ml-1"></i>
@@ -369,7 +356,7 @@
                         </button>
                     </div>
                     @error('bar_registration_image') 
-                        <span class="text-red-500 text-sm mt-1 flex items-center">
+                        <span class="text-red-500 text-sm flex items-center">
                             <i class="fas fa-exclamation-circle ml-1"></i>
                             {{ $message }}
                         </span> 
@@ -379,23 +366,27 @@
 
             <!-- Password Fields -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="password" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-lock gold-text ml-2"></i>
                         كلمة المرور <span class="text-red-500">*</span>
                     </label>
-                    <div class="relative">
+                    <div class="relative" x-data="{ showPassword: false }">
                         <input id="password" 
                                :type="showPassword ? 'text' : 'password'" 
                                wire:model.live="password" 
                                x-model="form.password"
                                @input="checkPasswordStrength"
                                @blur="validateField('password')"
-                               class="mt-1 block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
                                placeholder="أدخل كلمة مرور قوية"
                                autocomplete="new-password">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
                         <button type="button" 
                                 @click="showPassword = !showPassword"
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gold-primary transition-colors duration-300">
                             <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                         </button>
                     </div>
@@ -416,34 +407,38 @@
                     </div>
                     
                     @error('password') 
-                        <span class="text-red-500 text-sm mt-1 flex items-center">
+                        <span class="text-red-500 text-sm flex items-center">
                             <i class="fas fa-exclamation-circle ml-1"></i>
                             {{ $message }}
                         </span> 
                     @enderror
                 </div>
                 
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
+                <div class="space-y-2">
+                    <label for="password_confirmation" class="block text-sm font-bold grey-dark-text">
+                        <i class="fas fa-lock gold-text ml-2"></i>
                         تأكيد كلمة المرور <span class="text-red-500">*</span>
                     </label>
-                    <div class="relative">
+                    <div class="relative" x-data="{ showPasswordConfirm: false }">
                         <input id="password_confirmation" 
                                :type="showPasswordConfirm ? 'text' : 'password'" 
                                wire:model.live="password_confirmation" 
                                x-model="form.password_confirmation"
                                @blur="validateField('password_confirmation')"
-                               class="mt-1 block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300" 
                                placeholder="أعد إدخال كلمة المرور"
                                autocomplete="new-password">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
                         <button type="button" 
                                 @click="showPasswordConfirm = !showPasswordConfirm"
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gold-primary transition-colors duration-300">
                             <i :class="showPasswordConfirm ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
                         </button>
                     </div>
                     @error('password_confirmation') 
-                        <span class="text-red-500 text-sm mt-1 flex items-center">
+                        <span class="text-red-500 text-sm flex items-center">
                             <i class="fas fa-exclamation-circle ml-1"></i>
                             {{ $message }}
                         </span> 
@@ -452,27 +447,50 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="flex items-center justify-between pt-6">
-                <a class="text-sm text-blue-600 hover:text-blue-500 transition-colors duration-200" href="{{ route('login') }}" wire:navigate>
-                    لديك حساب بالفعل؟
-                </a>
-
+            <div class="pt-4">
                 <button type="submit" 
                         wire:loading.attr="disabled"
                         :disabled="loading"
-                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200">
-                    <span wire:loading.remove>
-                        <i class="fas fa-user-plus ml-2"></i>
+                        class="w-full gold-bg hover:bg-gold-secondary text-white py-4 px-6 rounded-xl font-bold focus:outline-none focus:ring-2 focus:ring-gold-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    
+                    <span wire:loading.remove class="flex items-center">
+                        <i class="fas fa-user-plus"></i>
                         إنشاء حساب
                     </span>
-                    <span wire:loading>
-                        <i class="fas fa-spinner fa-spin ml-2"></i>
+                    
+                    <span wire:loading class="flex items-center">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                         جاري التسجيل...
                     </span>
                 </button>
             </div>
 
+            <!-- Login Link -->
+            <div class="text-center pt-4 border-t border-gray-200">
+                <p class="text-sm grey-medium-text">
+                    لديك حساب بالفعل؟ 
+                    <a class="gold-text hover:text-gold-secondary font-bold transition-colors duration-300 mr-1" href="{{ route('login') }}" wire:navigate>
+                        سجل الدخول هنا
+                    </a>
+                </p>
+            </div>
         </form>
+
+        <!-- Help Section -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200 text-center">
+            <p class="text-sm grey-medium-text mb-2">هل تحتاج مساعدة في التسجيل؟</p>
+            <div class="flex flex-col sm:flex-row gap-2 justify-center text-xs">
+                <a href="mailto:support@cassation.gov.eg" class="gold-text hover:text-gold-secondary transition-colors">
+                    <i class="fas fa-envelope ml-1"></i>
+                    support@cassation.gov.eg
+                </a>
+                <span class="hidden sm:block text-gray-400">|</span>
+                <a href="tel:16000" class="gold-text hover:text-gold-secondary transition-colors">
+                    <i class="fas fa-phone ml-1"></i>
+                    16000
+                </a>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -631,11 +649,11 @@
                 handleFileUpload(event) {
                     const file = event.target.files[0];
                     if (file) {
-                        const maxSize = 5 * 1024 * 1024; // 5MB
-                        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                        const maxSize = 10 * 1024 * 1024; // 10MB
+                        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
                         
                         if (!allowedTypes.includes(file.type)) {
-                            alert('نوع الملف غير مدعوم. يرجى رفع صورة بصيغة JPG أو PNG');
+                            alert('نوع الملف غير مدعوم. يرجى رفع صورة بصيغة JPG, PNG أو GIF');
                             event.target.value = '';
                             this.form.bar_registration_image = null;
                             this.imagePreview = null;
@@ -643,7 +661,7 @@
                         }
                         
                         if (file.size > maxSize) {
-                            alert('حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت');
+                            alert('حجم الملف كبير جداً. الحد الأقصى 10 ميجابايت');
                             event.target.value = '';
                             this.form.bar_registration_image = null;
                             this.imagePreview = null;
@@ -662,58 +680,50 @@
                 removeImage() {
                     this.form.bar_registration_image = null;
                     this.imagePreview = null;
-                    this.$refs.bar_registration_image.value = '';
-                },
-
-                submitForm() {
-                    this.loading = true;
-                    
-                    // Validate all fields before submit
-                    Object.keys(this.form).forEach(field => {
-                        this.validateField(field);
-                    });
-                    
-                    // If no errors, the form will be submitted by Livewire
-                    if (Object.keys(this.errors).length === 0) {
-                        // Form will be submitted automatically
-                        setTimeout(() => {
-                            this.loading = false;
-                        }, 2000);
-                    } else {
-                        this.loading = false;
-                    }
+                    document.getElementById('bar_registration_image').value = '';
                 }
             }
         }
     </script>
 
     <style>
+        .gold-bg {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+        }
+        
+        .gold-text {
+            color: #D4AF37;
+        }
+        
+        .grey-dark-text {
+            color: #2D3748;
+        }
+        
+        .grey-medium-text {
+            color: #718096;
+        }
+        
+        .shadow-custom {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Custom radio styling */
+        input[type="radio"]:checked + div {
+            border-color: #D4AF37;
+            background-color: #FEF3C7;
+        }
+        
+        /* Focus styles */
+        input:focus, select:focus {
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        
+        /* Smooth transitions */
+        * {
+            transition-property: color, background-color, border-color, transform, box-shadow;
+            transition-duration: 300ms;
+        }
+        
         [x-cloak] { display: none !important; }
-        
-        /* Custom animations */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* File upload styling */
-        .file-upload-zone {
-            transition: all 0.3s ease;
-        }
-        
-        .file-upload-zone:hover {
-            border-color: #8B5CF6;
-            background-color: #F3F4F6;
-        }
-        
-        /* Password strength colors */
-        .strength-weak { color: #EF4444; }
-        .strength-fair { color: #F59E0B; }
-        .strength-good { color: #3B82F6; }
-        .strength-strong { color: #10B981; }
     </style>
 </div>

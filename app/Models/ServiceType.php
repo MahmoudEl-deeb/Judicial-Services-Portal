@@ -28,5 +28,14 @@ class ServiceType extends Model
         'allows_prepaid' => 'boolean',
         'is_active' => 'boolean',
     ];
-}
 
+    public function getBaseFeesAmountAttribute()
+    {
+        return $this->base_fee;
+    }
+
+    public function getUrgentFeesAmountAttribute()
+    {
+        return $this->base_fee * ($this->urgent_fee_multiplier - 1);
+    }
+}

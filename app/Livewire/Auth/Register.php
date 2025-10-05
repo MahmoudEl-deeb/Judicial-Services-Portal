@@ -68,6 +68,7 @@ class Register extends Component
             $user->email = $this->email;
             $user->national_id = $this->national_id;
             $user->phone = $this->phone;
+            
             $user->address = $this->address;
             $user->city = $this->city;
             $user->governorate = $this->governorate;

@@ -13,9 +13,10 @@ class UserDetails extends Component
     public $status; // Separate property for the status
     public $statuses = ['active', 'inactive', 'suspended', 'pending'];
 
-    public function mount(User $user)
+    public function mount( $encodeduser)
     {
-        // Load the user with lawyer relationship if it exists
+        $decodedId = base64_decode($encodeduser);
+        $user = User::findOrFail($decodedId);
         $this->user = $user->load('lawyer');
         
         // Initialize the status property with the user's current status

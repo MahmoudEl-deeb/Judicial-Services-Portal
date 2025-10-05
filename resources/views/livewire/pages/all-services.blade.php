@@ -1,112 +1,122 @@
+<div>
 <div 
     x-data="servicesPage()" 
-    class="min-h-screen bg-gray-50 py-8"
+    class="min-h-screen bg-[#F8FAFC] py-8"
     wire:loading.class="opacity-50"
 >
     <div class="container mx-auto px-4">
         <!-- Header Section -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">خدمات محكمة النقض</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                اكتشف الخدمات الإلكترونية المتاحة واختر الخدمة التي تحتاجها
+            <div class="inline-flex items-center justify-center w-20 h-20 gold-bg rounded-full mb-6">
+                <i class="fas fa-gavel text-2xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold grey-dark-text mb-4">خدمات محكمة النقض الإلكترونية</h1>
+            <p class="text-xl grey-medium-text max-w-2xl mx-auto leading-relaxed">
+                اكتشف مجموعة الخدمات القضائية المتاحة واختر الخدمة التي تحتاجها لتقديم طلبك إلكترونياً
             </p>
         </div>
 
         <!-- Search and Filter Section -->
-        <div class="bg-white rounded-2xl shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="bg-white rounded-2xl shadow-custom border border-gray-100 p-6 mb-8">
+            <div class="flex flex-col lg:flex-row gap-6 items-center justify-between">
                 <!-- Search Input -->
-                <div class="flex-1 w-full md:w-auto">
+                <div class="flex-1 w-full lg:w-auto">
                     <div class="relative">
                         <input 
                             wire:model.live.debounce.500ms="searchTerm"
                             type="text" 
                             placeholder="ابحث عن خدمة..."
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            class="w-full pr-12 pl-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary transition-all duration-300"
                         >
-                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                            <i class="fas fa-search text-gray-400"></i>
                         </div>
                         
                         <!-- Loading indicator for search -->
                         <div 
                             wire:loading.flex 
                             wire:target="searchTerm"
-                            class="absolute left-3 top-1/2 transform -translate-y-1/2"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2"
                         >
-                            <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                            <div class="w-4 h-4 border-2 border-gold-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Sort Options -->
-                <div class="flex gap-3">
-                    <select 
-                        wire:model.live="sortBy"
-                        class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    >
-                        <option value="name">ترتيب حسب الاسم</option>
-                        <option value="newest">الأحدث أولاً</option>
-                        <option value="oldest">الأقدم أولاً</option>
-                    </select>
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                    <div class="relative flex-1">
+                        <select 
+                            wire:model.live="sortBy"
+                            class="w-full border border-gray-300 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-gold-primary focus:border-gold-primary appearance-none transition-all duration-300"
+                        >
+                            <option value="name">ترتيب حسب الاسم</option>
+                            <option value="newest">الأحدث أولاً</option>
+                            <option value="oldest">الأقدم أولاً</option>
+                        </select>
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <i class="fas fa-sort text-gray-400"></i>
+                        </div>
+                    </div>
 
                     <!-- Active Services Toggle -->
                     <button 
                         wire:click="toggleActiveOnly"
-                        class="px-4 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2 {{ $activeOnly ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}"
+                        class="px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-3 border-2 {{ $activeOnly ? 'gold-bg text-white border-gold-primary' : 'bg-white text-gray-700 border-gray-300 hover:border-gold-primary' }}"
                     >
                         <span>الخدمات النشطة فقط</span>
                         @if($activeOnly)
-                            <span>✓</span>
+                            <i class="fas fa-check text-sm"></i>
                         @endif
                     </button>
                 </div>
             </div>
 
-            <!-- Results Counter -->
-            @if($services->count() > 0)
-                <div class="mt-4 text-sm text-gray-600">
-                    عرض {{ $services->count() }} من أصل {{ $totalServices }} خدمة
-                </div>
-            @endif
+            <!-- Results Counter and Clear Filters -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                @if($services->count() > 0)
+                    <div class="text-sm grey-medium-text">
+                        عرض <span class="font-bold gold-text">{{ $services->count() }}</span> من أصل <span class="font-bold grey-dark-text">{{ $totalServices }}</span> خدمة
+                    </div>
+                @endif
 
-            <!-- Clear Filters Button -->
-            @if($searchTerm || $activeOnly || $sortBy !== 'name')
-                <div class="mt-4">
-                    <button 
-                        wire:click="clearFilters"
-                        class="text-blue-600 hover:text-blue-800 text-sm underline"
-                    >
-                        مسح جميع الفلاتر
-                    </button>
-                </div>
-            @endif
+                <!-- Clear Filters Button -->
+                @if($searchTerm || $activeOnly || $sortBy !== 'name')
+                    <div>
+                        <button 
+                            wire:click="clearFilters"
+                            class="text-gold-primary hover:text-gold-secondary text-sm font-medium flex items-center gap-2 transition-colors duration-300"
+                        >
+                            <i class="fas fa-times"></i>
+                            مسح جميع الفلاتر
+                        </button>
+                    </div>
+                @endif
+            </div>
         </div>
 
         <!-- Loading State -->
-        <div wire:loading.flex wire:target="searchTerm,sortBy,activeOnly" class="justify-center py-12">
-            <div class="inline-flex items-center gap-3">
-                <div class="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                <span class="text-gray-600">جاري تحميل الخدمات...</span>
+        <div wire:loading.flex wire:target="searchTerm,sortBy,activeOnly" class="justify-center py-16">
+            <div class="inline-flex items-center gap-4 bg-white rounded-2xl shadow-custom border border-gray-100 p-6">
+                <div class="w-6 h-6 border-2 border-gold-primary border-t-transparent rounded-full animate-spin"></div>
+                <span class="grey-medium-text">جاري تحميل الخدمات...</span>
             </div>
         </div>
 
         <!-- Services Grid -->
         <div wire:loading.remove wire:target="searchTerm,sortBy,activeOnly">
             @if($services->count() > 0)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
                     @foreach($services as $service)
                         <div 
-                            class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group cursor-pointer"
+                            class="bg-white rounded-2xl shadow-custom border border-gray-100 hover:shadow-xl hover:border-gold-primary transition-all duration-500 overflow-hidden group cursor-pointer"
                             x-data="{ hovered: false }"
                             @mouseenter="hovered = true"
                             @mouseleave="hovered = false"
                             @click="viewService({{ json_encode($service) }})"
                         >
-                            <!-- Service Icon/Image Area -->
-                            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 text-center relative">
+                            <!-- Service Header -->
+                            <div class="bg-gradient-to-br from-[#2D3748] to-[#4A5568] p-6 text-white relative overflow-hidden">
                                 <!-- Hover Effect -->
                                 <div 
                                     x-show="hovered"
@@ -116,36 +126,58 @@
                                     x-transition:leave="transition-opacity duration-300"
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
-                                    class="absolute inset-0 bg-blue-600 opacity-10"
+                                    class="absolute inset-0 bg-gold-primary opacity-20"
                                 ></div>
                                 
-                                <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300 relative z-10">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                    </svg>
+                                <!-- Service Icon -->
+                                <div class="w-16 h-16 gold-bg rounded-2xl mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300 relative z-10 shadow-lg">
+                                    <i class="fas fa-balance-scale text-white text-2xl"></i>
+                                </div>
+
+                                <!-- Status Badge -->
+                                <div class="absolute top-4 left-4 z-10">
+                                    <span class="text-xs px-3 py-1 rounded-full {{ $service->is_active ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }} font-medium">
+                                        {{ $service->is_active ? 'نشط' : 'غير نشط' }}
+                                    </span>
                                 </div>
                             </div>
 
                             <!-- Service Content -->
                             <div class="p-6">
-                                <h2 class="text-xl font-bold text-gray-800 mb-3 line-clamp-2">{{ $service->service_name_ar }}</h2>
-                                <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">{{ $service->description_ar }}</p>
+                                <h2 class="text-xl font-bold grey-dark-text mb-3 line-clamp-2 group-hover:gold-text transition-colors duration-300">
+                                    {{ $service->service_name_ar }}
+                                </h2>
+                                <p class="grey-medium-text text-sm leading-relaxed mb-6 line-clamp-3">
+                                    {{ $service->description_ar }}
+                                </p>
                                 
+                                <!-- Service Details -->
+                                <div class="flex items-center justify-between text-xs grey-light-text mb-4">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-clock"></i>
+                                        <span>{{ $service->processing_time_hours ?? 72 }} ساعة</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-coins"></i>
+                                        <span>{{ number_format($service->base_fees_amount ?? 0, 2) }} ج.م</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
                                 <div class="flex justify-between items-center">
                                     <a 
-                                        href="{{ route('services.create', [ 'id' => $service->id ]) }}"
-                                        class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                                        href="{{ route('services.create',base64_encode($service->id )) }}"
+                                        class="gold-bg hover:bg-gold-secondary text-white py-3 px-6 rounded-xl font-bold transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl"
                                         onclick="event.stopPropagation()"
                                     >
-                                        <span>اطلب الآن</span>
-                                        <svg class="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                                        </svg>
+                                        <span>اطلب الخدمة</span>
+                                        <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
                                     </a>
                                     
-                                    <span class="text-xs px-3 py-1 rounded-full {{ $service->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ $service->is_active ? 'نشط' : 'غير نشط' }}
-                                    </span>
+                                    <button class="text-gold-primary hover:text-gold-secondary transition-colors duration-300 flex items-center gap-2">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span class="text-sm">تفاصيل</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -153,19 +185,20 @@
                 </div>
             @else
                 <!-- No Results State -->
-                <div class="text-center py-16">
+                <div class="text-center py-20">
                     <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                        <i class="fas fa-search text-gray-400 text-3xl"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">لا توجد خدمات مطابقة للبحث</h3>
-                    <p class="text-gray-500 mb-4">حاول تغيير كلمات البحث أو إزالة الفلتر</p>
+                    <h3 class="text-2xl font-bold grey-dark-text mb-3">لا توجد خدمات مطابقة للبحث</h3>
+                    <p class="text-lg grey-medium-text mb-6 max-w-md mx-auto">
+                        لم نتمكن من العثور على خدمات تطابق معايير البحث المطلوبة
+                    </p>
                     <button 
                         wire:click="clearFilters"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200"
+                        class="gold-bg hover:bg-gold-secondary text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg flex items-center gap-3 mx-auto"
                     >
-                        مسح الفلتر
+                        <i class="fas fa-times"></i>
+                        مسح جميع الفلاتر
                     </button>
                 </div>
             @endif
@@ -174,36 +207,98 @@
         <!-- Pagination -->
         @if($services->hasPages())
             <div class="flex justify-center">
-                <div class="bg-white rounded-2xl shadow-sm p-4">
-                    {{ $services->links() }}
+                <div class="bg-white rounded-2xl shadow-custom border border-gray-100 p-4">
+                    <!-- Enhanced Pagination -->
+                    <div class="flex items-center space-x-2 space-x-reverse">
+                        <!-- Custom Pagination Links -->
+                        <nav class="flex items-center space-x-2 space-x-reverse">
+                            <!-- First Page -->
+                            @if($services->onFirstPage())
+                                <span class="px-3 py-2 text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </span>
+                            @else
+                                <a href="{{ $services->url(1) }}" 
+                                   class="px-3 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gold-light hover:border-gold-primary transition-all duration-300">
+                                    <i class="fas fa-angle-double-right"></i>
+                                </a>
+                            @endif
+
+                            <!-- Previous Page -->
+                            @if($services->onFirstPage())
+                                <span class="px-3 py-2 text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-angle-right"></i>
+                                </span>
+                            @else
+                                <a href="{{ $services->previousPageUrl() }}" 
+                                   class="px-3 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gold-light hover:border-gold-primary transition-all duration-300">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            @endif
+
+                            <!-- Page Numbers -->
+                            @foreach($services->getUrlRange(max(1, $services->currentPage() - 2), min($services->lastPage(), $services->currentPage() + 2)) as $page => $url)
+                                @if($page == $services->currentPage())
+                                    <span class="px-4 py-2 gold-bg text-white rounded-lg font-bold shadow-lg">
+                                        {{ $page }}
+                                    </span>
+                                @else
+                                    <a href="{{ $url }}" 
+                                       class="px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gold-light hover:border-gold-primary transition-all duration-300">
+                                        {{ $page }}
+                                    </a>
+                                @endif
+                            @endforeach
+
+                            <!-- Next Page -->
+                            @if($services->hasMorePages())
+                                <a href="{{ $services->nextPageUrl() }}" 
+                                   class="px-3 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gold-light hover:border-gold-primary transition-all duration-300">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            @else
+                                <span class="px-3 py-2 text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-angle-left"></i>
+                                </span>
+                            @endif
+
+                            <!-- Last Page -->
+                            @if($services->hasMorePages())
+                                <a href="{{ $services->url($services->lastPage()) }}" 
+                                   class="px-3 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gold-light hover:border-gold-primary transition-all duration-300">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </a>
+                            @else
+                                <span class="px-3 py-2 text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-angle-double-left"></i>
+                                </span>
+                            @endif
+                        </nav>
+                    </div>
                 </div>
             </div>
         @endif
 
-        <!-- Service Modal -->
-        <div 
-            x-show="showModal" 
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-            @click.self="showModal = false"
-            style="display: none;"
-        >
-            <div 
-                x-show="showModal"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-95"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95"
-                class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            >
-                <div class="p-6" x-html="modalContent"></div>
+        <!-- Help Section -->
+        <div class="mt-16 bg-white rounded-2xl shadow-custom border border-gray-100 p-8 text-center">
+            <div class="max-w-2xl mx-auto">
+                <div class="w-16 h-16 gold-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-headset text-white text-xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold grey-dark-text mb-4">هل تحتاج مساعدة؟</h3>
+                <p class="text-lg grey-medium-text mb-6">
+                    فريق الدعم الفني جاهز لمساعدتك في اختيار الخدمة المناسبة وتقديم الطلبات
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="tel:16000" class="bg-gold-primary hover:bg-gold-secondary text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-3 justify-center">
+                        <i class="fas fa-phone"></i>
+                        16000
+                    </a>
+                    <a href="mailto:support@cassation.gov.eg" class="border-2 border-gold-primary text-gold-primary hover:bg-gold-light px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-3 justify-center">
+                        <i class="fas fa-envelope"></i>
+                        support@cassation.gov.eg
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -224,19 +319,34 @@ document.addEventListener('alpine:init', () => {
         // View service details in modal
         viewService(service) {
             this.modalContent = `
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-blue-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
-                        <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                        </svg>
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 gold-bg rounded-2xl mx-auto flex items-center justify-center mb-6">
+                        <i class="fas fa-balance-scale text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">${service.service_name_ar}</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">${service.description_ar}</p>
+                    <h3 class="text-2xl font-bold grey-dark-text mb-4">${service.service_name_ar}</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed text-right">${service.description_ar}</p>
+                    
+                    <!-- Service Details -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-50 rounded-xl p-4 text-center">
+                            <i class="fas fa-clock text-gold-primary text-xl mb-2"></i>
+                            <div class="text-sm grey-medium-text">مدة المعالجة</div>
+                            <div class="font-bold grey-dark-text">${service.processing_time_hours || 72} ساعة</div>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 text-center">
+                            <i class="fas fa-coins text-gold-primary text-xl mb-2"></i>
+                            <div class="text-sm grey-medium-text">الرسوم الأساسية</div>
+                            <div class="font-bold grey-dark-text">${(service.base_fees_amount || 0).toLocaleString('ar-EG')} ج.م</div>
+                        </div>
+                    </div>
+                    
                     <div class="flex gap-4 justify-center">
-                        <a href="/service-request/${service.service_type_key}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+                        <a href="/services/create/${service.id}" class="gold-bg hover:bg-gold-secondary text-white px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-3">
+                            <i class="fas fa-paper-plane"></i>
                             طلب الخدمة
                         </a>
-                        <button @click="showModal = false" class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-200">
+                        <button @click="showModal = false" class="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-xl font-bold transition-all duration-300 flex items-center gap-3">
+                            <i class="fas fa-times"></i>
                             إغلاق
                         </button>
                     </div>
@@ -249,18 +359,31 @@ document.addEventListener('alpine:init', () => {
 </script>
 @endpush
 
-@push('styles')
 <style>
-    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-2 { 
+        display: -webkit-box; 
+        -webkit-line-clamp: 2; 
+        -webkit-box-orient: vertical; 
+        overflow: hidden; 
+    }
+    .line-clamp-3 { 
+        display: -webkit-box; 
+        -webkit-line-clamp: 3; 
+        -webkit-box-orient: vertical; 
+        overflow: hidden; 
+    }
     
-    /* Custom Pagination Styles */
-    .pagination { display: flex; justify-content: center; list-style: none; padding: 0; margin: 0; gap: 8px; }
-    .pagination li { margin: 0; }
-    .pagination .page-link { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; font-weight: 500; text-decoration: none; transition: all 0.2s; }
-    .pagination .page-item.active .page-link { background-color: #2563eb; color: white; border-color: #2563eb; }
-    .pagination .page-item:not(.active) .page-link { background-color: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
-    .pagination .page-item:not(.active) .page-link:hover { background-color: #e2e8f0; color: #475569; }
-    .pagination .page-item.disabled .page-link { background-color: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+    /* Custom scrollbar for modal */
+    .modal-content::-webkit-scrollbar {
+        width: 6px;
+    }
+    .modal-content::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+    .modal-content::-webkit-scrollbar-thumb {
+        background: #D4AF37;
+        border-radius: 3px;
+    }
 </style>
-@endpush
+</div>

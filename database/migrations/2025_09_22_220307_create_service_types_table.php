@@ -29,12 +29,9 @@ public function up()
         $table->decimal('base_fee', 12, 2)->default(0);
         $table->decimal('urgent_fee_multiplier', 8, 2)->default(1);
         $table->integer('processing_days')->default(0);
-        $table->integer('urgent_processing_hours')->default(0);
+        $table->integer('urgent_processing_days')->default(0);
         $table->boolean('allows_urgent')->default(false);
-        // $table->boolean('allows_prepaid')->default(false);
-        // $table->json('validation_rules')->nullable();
-        // $table->json('workflow_steps')->nullable();
-        // $table->json('required_secretary_actions')->nullable();
+        $table->boolean('is_prepaid_service')->default(false);
         $table->boolean('requires_case_reference')->default(false);
         $table->boolean('requires_lawyer_signature')->default(false);
         $table->boolean('requires_department_approval')->default(false);

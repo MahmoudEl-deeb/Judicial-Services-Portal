@@ -3,6 +3,7 @@
 namespace App\Livewire\Pages;
 
 use App\Models\ServiceType;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -51,6 +52,10 @@ class AllServices extends Component
     public function getServicesProperty()
     {
         $query = ServiceType::query();
+
+        if (Auth::user()->hasRole('litigant')) {
+            $query->where('requires_lawyer_signature', false);
+        }
 
         // Search filter
         if ($this->searchTerm) {
