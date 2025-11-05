@@ -1,24 +1,36 @@
 {
     "version": 2,
-    "outputDirectory": "public",
+    "framework": "laravel",
     "builds": [
         {
             "src": "api/index.php",
             "use": "vercel-php@0.6.0"
+        },
+        {
+            "src": "composer.json",
+            "use": "@vercel/php"
+        },
+        {
+            "src": "package.json",
+            "use": "@vercel/node"
         }
     ],
     "routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/build/$1"
+            "src": "^/build/(.*)$",
+            "dest": "/public/build/$1"
         },
         {
-            "src": "/assets/(.*)",
-            "dest": "/assets/$1"
+            "src": "^/favicon\\.ico$",
+            "dest": "/public/favicon.ico"
         },
         {
-            "src": "/(.+\\.(css|js|mjs|json|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf|webp|map))",
-            "dest": "/$1"
+            "src": "^/robots\\.txt$",
+            "dest": "/public/robots.txt"
+        },
+        {
+            "src": "^/(?!api).*\\.(css|js|mjs|json|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|pdf|webp|map)$",
+            "dest": "/public/$0"
         },
         {
             "src": "/(.*)",
