@@ -1,18 +1,13 @@
 {
     "version": 2,
-    "framework": "laravel",
+    "framework": "vite",
     "builds": [
         {
             "src": "api/index.php",
-            "use": "vercel-php@0.6.0"
-        },
-        {
-            "src": "composer.json",
-            "use": "@vercel/php"
-        },
-        {
-            "src": "package.json",
-            "use": "@vercel/node"
+            "use": "vercel-php@0.6.0",
+            "config": {
+                "composer": true
+            }
         }
     ],
     "routes": [
