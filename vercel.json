@@ -1,26 +1,24 @@
 {
     "version": 2,
+    "outputDirectory": "public",
     "builds": [
         {
             "src": "api/index.php",
             "use": "vercel-php@0.6.0"
-        },
-        {
-            "src": "package.json",
-            "use": "@vercel/static-build",
-            "config": {
-                "distDir": "public/build"
-            }
         }
     ],
     "routes": [
         {
             "src": "/build/(.*)",
-            "dest": "/public/build/$1"
+            "dest": "/build/$1"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/assets/$1"
         },
         {
             "src": "/(.+\\.(css|js|mjs|json|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf|webp|map))",
-            "dest": "/public/$1"
+            "dest": "/$1"
         },
         {
             "src": "/(.*)",
