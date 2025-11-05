@@ -1,31 +1,19 @@
 {
     "version": 2,
-    "framework": "vite",
     "builds": [
         {
             "src": "api/index.php",
-            "use": "vercel-php@0.6.1",
-            "config": {
-                "composer": true
-            }
+            "use": "@vercel/php"
         }
     ],
     "routes": [
         {
-            "src": "^/build/(.*)$",
+            "src": "/build/(.*)",
             "dest": "/public/build/$1"
         },
         {
-            "src": "^/favicon\\.ico$",
-            "dest": "/public/favicon.ico"
-        },
-        {
-            "src": "^/robots\\.txt$",
-            "dest": "/public/robots.txt"
-        },
-        {
-            "src": "^/(?!api).*\\.(css|js|mjs|json|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|pdf|webp|map)$",
-            "dest": "/public/$0"
+            "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
+            "dest": "/public/$1"
         },
         {
             "src": "/(.*)",
